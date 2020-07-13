@@ -1,4 +1,4 @@
-Application commands:
+#Application commands:
   Camera commands from cheatsheet SET/GET
     Data value of command can be in hexa code with prefix „0x“
   Camera commands for byte arrays SETB/GETB
