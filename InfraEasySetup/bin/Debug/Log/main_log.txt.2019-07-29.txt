@@ -1,0 +1,8 @@
+﻿2019-07-29 09:00:55,658 [1] INFO  MainLog [(null)] - Logger MainLog initialized successfuly. Using configuration file C:\Users\cech.jiri\Documents\Visual Studio 2017\Projects\AppInfra\InfraEasySetup\bin\Debug\MainLog.log4net.
+2019-07-29 09:00:55,691 [1] DEBUG MainLog [(null)] - PripojujiKameru, Calling method:AppJCE.Vypis.Debug (line 19)
+2019-07-29 09:00:55,705 [1] DEBUG MainLog [(null)] - OnACConnected, Calling method:AppJCE.Vypis.Debug (line 19)
+2019-07-29 09:00:55,755 [1] DEBUG MainLog [(null)] - Moje kamera: IRCA3Mv190206a, Calling method:AppJCE.Vypis.Debug (line 19)
+2019-07-29 09:01:03,233 [1] DEBUG MainLog [(null)] - OdpojujiKameru, Calling method:AppJCE.Vypis.Debug (line 19)
+2019-07-29 09:01:03,254 [5] DEBUG MainLog [(null)] - Konec pripojeni, Calling method:AppJCE.Vypis.Debug (line 19)
+2019-07-29 09:01:06,224 [1] DEBUG MainLog [(null)] - StreamBolometer cancel error, Calling method:AppJCE.Vypis.Debug (line 19)
+2019-07-29 09:01:06,224 [1] DEBUG MainLog [(null)] - KameraOdpojena, Calling method:AppJCE.Vypis.Debug (line 19)

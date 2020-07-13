@@ -1,0 +1,2 @@
+﻿2019-01-18 10:55:43,348 [1] INFO  MainLog [(null)] - Logger MainLog initialized successfuly. Using configuration file C:\Users\cech.jiri\Documents\Visual Studio 2017\Projects\AppInfra\EasyCC\bin\Debug\MainLog.log4net.
+2019-01-18 10:55:43,385 [1] DEBUG MainLog [(null)] - PripojujiKameru, Calling method:AppJCE.Vypis.Debug (line 19)

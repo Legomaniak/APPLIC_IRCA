@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="InfraViewer.uStepper"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:InfraViewer"
+             xmlns:Komunikace="clr-namespace:AppJCE.Komunikace;assembly=AppJCE"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Komunikace:ASerialControl x:Name="sc" HorizontalAlignment="Left" Width="300"/>
+        <Grid Height="200" Width="450" HorizontalAlignment="Left" Margin="300,0,0,0" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <Label Content="Těleso" Height="25"/>
+                <Label Content="PolohaA" Height="25"/>
+                <Separator Visibility="Hidden"/>
+                <Label Content="Poloha0" Height="25"/>
+                <Label Content="PolohaM" Height="25"/>
+                <Label Content="Krok" Height="25"/>
+                <Label Content="Pauza" Height="25"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1">
+                <TextBox x:Name="tbTeleso" Height="25" TextWrapping="Wrap" Text="{Binding PoziceT}"/>
+                <TextBox x:Name="tbPoloha" Height="25" TextWrapping="Wrap" Text="{Binding Pozice}"/>
+                <Separator Visibility="Hidden"/>
+                <TextBox x:Name="tbPoloha0" Height="25" TextWrapping="Wrap" Text="{Binding Pozice0}"/>
+                <TextBox x:Name="tbPolohaM" Height="25" TextWrapping="Wrap" Text="{Binding PoziceM}"/>
+                <TextBox x:Name="tbKrok" Height="25" TextWrapping="Wrap" Text="{Binding Krok}"/>
+                <TextBox x:Name="tbCas" Height="25" TextWrapping="Wrap" Text="{Binding Cas}"/>
+            </StackPanel>
+            <StackPanel Grid.Column="2">
+                <Button Content="Nastav" Click="NastavTeleso" Height="25"/>
+                <Button Content="Nastav" Click="NastavPolohu" Height="25"/>
+                <Separator Visibility="Hidden"/>
+                <Button Content="Skenuj" Click="NastavSken" Height="25"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

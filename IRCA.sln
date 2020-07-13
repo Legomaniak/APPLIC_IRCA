@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1169
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfraEasySetup", "InfraEasySetup\InfraEasySetup.csproj", "{075A58E7-E4C1-4EF5-B03B-650B26F21C82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCC", "EasyCC\EasyCC.csproj", "{219A46FE-7297-44BB-BDAE-AC0992DFE41A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfraViewer", "InfraViewer\InfraViewer.csproj", "{2AD43A99-BD81-44EA-88F9-02EDD45276EC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{075A58E7-E4C1-4EF5-B03B-650B26F21C82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{075A58E7-E4C1-4EF5-B03B-650B26F21C82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{075A58E7-E4C1-4EF5-B03B-650B26F21C82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{075A58E7-E4C1-4EF5-B03B-650B26F21C82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{219A46FE-7297-44BB-BDAE-AC0992DFE41A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{219A46FE-7297-44BB-BDAE-AC0992DFE41A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{219A46FE-7297-44BB-BDAE-AC0992DFE41A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{219A46FE-7297-44BB-BDAE-AC0992DFE41A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AD43A99-BD81-44EA-88F9-02EDD45276EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AD43A99-BD81-44EA-88F9-02EDD45276EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AD43A99-BD81-44EA-88F9-02EDD45276EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AD43A99-BD81-44EA-88F9-02EDD45276EC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D38E4F78-14B0-45D5-AE68-0B2C02D7F87A}
+	EndGlobalSection
+EndGlobal

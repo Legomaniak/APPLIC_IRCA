@@ -1,0 +1,54 @@
+﻿<Window xmlns:Zobrazeni="clr-namespace:AppJCE.Zobrazeni;assembly=AppJCE"  x:Class="InfraEasySetup.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:InfraEasySetup"
+        xmlns:Okna="clr-namespace:AppJCE.Okna;assembly=AppJCE"
+        xmlns:Controls="clr-namespace:ApplicInfra.Infra.Controls;assembly=ApplicInfra"
+        xmlns:Infra="clr-namespace:ApplicInfra.Infra;assembly=ApplicInfra"
+        xmlns:AppJCE="clr-namespace:AppJCE;assembly=AppJCE"
+        xmlns:Komponenty="clr-namespace:AppJCE.Komponenty;assembly=AppJCE"
+        mc:Ignorable="d"
+        Title="InfraEasySetup" Height="600" Width="1000" WindowStyle="SingleBorderWindow">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="550*"/>
+            <RowDefinition Height="150"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="300"/>
+        </Grid.ColumnDefinitions>
+        <Okna:HorniLista VerticalAlignment="Top" x:Name="hl" Grid.ColumnSpan="2"/>
+        <Infra:CameraControlOnline x:Name="cco" HorizontalAlignment="Left"/>
+
+        <GroupBox Header="Video stream" Grid.Row="1">
+            <Infra:ObrazekViewFull x:Name="ov"/>
+        </GroupBox>
+        <ScrollViewer Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Margin="0,0,0,35" VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <GroupBox Header="Settings">
+                <StackPanel>
+                    <Controls:BolometerControl3 x:Name="bolometerControl"/>
+                    <Controls:ControlGMSGain x:Name="controlGMSGain" HorizontalAlignment="Left"/>
+                    <Controls:ControlCorrection x:Name="corr" Content="Plain Correction"/>
+                    <Controls:BolometerFastSetup x:Name="bolometerFastSetup" />
+                </StackPanel>
+            </GroupBox>
+        <GroupBox Header="ROI">
+                <Zobrazeni:ControlROI x:Name="controlROI"/>
+            </GroupBox>
+        </StackPanel>
+        </ScrollViewer>
+        <GroupBox Header="Graphs" Grid.Row="2">
+            <Zobrazeni:Show1D x:Name="graph1d"/>
+        </GroupBox>
+        <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Bottom" Height="35">
+            <Button Content="Save" Click="ButtonS_Click" Width="50"/>
+            <Separator Visibility="Hidden" Width="10"/>
+            <Button Content="Save Bin" Click="ButtonSB_Click" Width="60"/>
+        </StackPanel>
+    </Grid>
+</Window>

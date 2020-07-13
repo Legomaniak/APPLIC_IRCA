@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
+  <asmv1:assemblyIdentity name="InfraEasySetup.exe" version="1.0.0.2" publicKeyToken="aded7e6077f8a485" language="neutral" processorArchitecture="msil" type="win32" />
+  <description asmv2:iconFile="ApplicMetroIcoV2.ico" xmlns="urn:schemas-microsoft-com:asm.v1" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="InfraEasySetup" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+    <commandLine file="InfraEasySetup.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!--
+          Možnosti manifestu pro nástroj Řízení uživatelských účtů
+          Pokud chcete změnit úroveň nástroje Řízení uživatelských účtů, nahraďte 
+          uzel requestedExecutionLevel jednou z následujících hodnot.
+
+        <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+
+         Pokud chcete využívat virtualizaci souborů a registru pro zpětnou 
+         kompatibilitu, pak uzel requestedExecutionLevel odstraňte.
+    -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="5" minorVersion="1" buildNumber="2600" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="4.0.30319.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="AppJCE.dll" size="675328">
+      <assemblyIdentity name="AppJCE" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>fcqZqSOm8Y7+Ryrxk6eAl+Ip55WqItg2chqIIPupb6Y=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ApplicInfra.dll" size="514048">
+      <assemblyIdentity name="ApplicInfra" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>bA8xTTk5EWrEUXtbZvOrghR6/cXUYLDzN56RLyx6nEo=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="InfraEasySetup.exe" size="87488">
+      <assemblyIdentity name="InfraEasySetup" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>wyCs5rRsz7ma2IbKLnyLflbhZyrbEmA4X6I63yDxjbE=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="KeraLua.dll" size="17920">
+      <assemblyIdentity name="KeraLua" version="1.3.2.0" publicKeyToken="04D04586786C6F34" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>suPr2dJ66lROSHxf3YxhSanGQTU2NcKtB8IdZD3r6Nw=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="log4net.dll" size="276480">
+      <assemblyIdentity name="log4net" version="2.0.8.0" publicKeyToken="669E0DDF0BB1AA2A" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>r1YQxRXSJE25jGYmNiZMgXfomxr+QH+I/RikHWb25+I=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ManagedCuda.dll" size="1665024">
+      <assemblyIdentity name="ManagedCuda" version="8.0.12.0" publicKeyToken="242D898828717AA0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>sktI7bpl3pZGYxMoTW38LgJe0UsL4wWE/YtRxga7Mr4=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Modbus.dll" size="34304">
+      <assemblyIdentity name="Modbus" version="1.0.1.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>HsrRcL0qhUuO4PmeaYmilKvG+8thY1DUtjaEqS6oxLQ=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Nini.dll" size="69632">
+      <assemblyIdentity name="Nini" version="1.1.0.0" publicKeyToken="691FAEC150A7FA7B" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>Xu8Anlcb66dvJwz96MZkoTj2yTfZl2kvrEKFG6CGjCA=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="NLua.dll" size="93184">
+      <assemblyIdentity name="NLua" version="1.3.2.0" publicKeyToken="8DF2AB518030EA95" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>fp3zn8e7Oi8nLLS7shwx8bLvZEMGWeB/F5UUYnkZCUs=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="NVRTC.dll" size="10752">
+      <assemblyIdentity name="NVRTC" version="8.0.12.0" language="neutral" processorArchitecture="amd64" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>jl5mLYuntYVRvKdzmLFpEx/InrGzPzGyyizkrLKCd7w=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="SharpAvi.dll" size="38912">
+      <assemblyIdentity name="SharpAvi" version="1.1.0.1" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>sggiKY6D1Y7YqQVaKChlvotEwVWv57KjsHIBUSjYpNw=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Xceed.Wpf.Toolkit.dll" size="1022976">
+      <assemblyIdentity name="Xceed.Wpf.Toolkit" version="2.6.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>mBlLvKXptGdaSfzf0rLLh/tjq9bZ16ifw0JdZchkR4U=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="ApplicMetroIcoV2.ico" size="32950">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>c9QfCOGJuHyGMEjim/cRwovFvxFaROMmgS7K4JIDA3U=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="InfraEasySetup.exe.config" size="186">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>hW4v+PeMBdhnM2xLkpUMkK0Osj6snyL6jc7rIizh5Bc=</dsig:DigestValue>
+    </hash>
+  </file>
+<publisherIdentity name="CN=APPLIC\cech.jiri" issuerKeyHash="5f738c6bb4f517851814b80a772b4cc9f4c42436" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>eMq/Z6d6BIJj6tMZ0is2xYdAl/HXvDj91v5o7m4Xhfg=</DigestValue></Reference></SignedInfo><SignatureValue>rCfxAOKwz8pkBnfCI5at5fsaRcAXurH85+AC7rlyGVGMS+MKf5hl5SW7TVlBM1tCIGBZnPn9o/oIJ8kJLjW+w/5VmcL6HKzOKMucJ2A/3jZwFrJrUm7smCXWVYHfQwFc9J3B0SAN038yzU9DNmCbqypCsfXNpvMpew+kZTfRBOk=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>v8tltfKkmP5kSk+q+f7/cVa4JogHNpn7AURAyn/XKJb4GX+83aRUHDGHrT39HEeDMhQZM6gKYDY9X1qLbQxnMeqs+7hEA6hIaSypG/VenPBGjMuP24vtAfe7HaX1brpQgEb/T9ksrcunRnmiDF9H6dt3yfjR9Gj+2ElNVEiw9ek=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="f885176eee68fed6fd38bcd7f1974087c5362bd219d3ea6382047aa767bfca78" Description="" Url=""><as:assemblyIdentity name="InfraEasySetup.exe" version="1.0.0.2" publicKeyToken="aded7e6077f8a485" language="neutral" processorArchitecture="msil" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=APPLIC\cech.jiri</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>Du7jZb7i8ZJwdlDJqNrDabx7TGsYY0io/WqAKF+zKGw=</DigestValue></Reference></SignedInfo><SignatureValue>VLWu/EFyX4724pr047P8XfXZ/oB3kCjmAMnW+EJKF2Gs8nlp0ZxWFlFaZ4/0d1RqeC4NPLzYJO2320mJyh2leflLnQBx0CGUuDP0yJe7h64TQOpeeI1LE1nRj5mB8TZ1bAeflssSsKJuqy1iuU/tgRgWUR4FeMB8WKnsfGRIbEM=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>v8tltfKkmP5kSk+q+f7/cVa4JogHNpn7AURAyn/XKJb4GX+83aRUHDGHrT39HEeDMhQZM6gKYDY9X1qLbQxnMeqs+7hEA6hIaSypG/VenPBGjMuP24vtAfe7HaX1brpQgEb/T9ksrcunRnmiDF9H6dt3yfjR9Gj+2ElNVEiw9ek=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIB2TCCAUKgAwIBAgIQOCRsQMOJkJFJWrISKVto0jANBgkqhkiG9w0BAQsFADArMSkwJwYDVQQDHiAAQQBQAFAATABJAEMAXABjAGUAYwBoAC4AagBpAHIAaTAeFw0xODA2MTExMTAyNTlaFw0xOTA2MTExNzAyNTlaMCsxKTAnBgNVBAMeIABBAFAAUABMAEkAQwBcAGMAZQBjAGgALgBqAGkAcgBpMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC/y2W18qSY/mRKT6r5/v9xVrgmiAc2mfsBREDKf9colvgZf7zdpFQcMYetPf0cR4MyFBkzqApgNj1fWottDGcx6qz7uEQDqEhpLKkb9V6c8EaMy4/bi+0B97sdpfVuulCARv9P2Syty6dGeaIMX0fp23fJ+NH0aP7YSU1USLD16QIDAQABMA0GCSqGSIb3DQEBCwUAA4GBABHDleMfyvmqN0uR9oZrEvT/qf20iCYyBUL47lCgB9ToetqudxLTblnDuaZqAbpvquBQSkXQN3vIcBX+dVPYFaHXzWlTOgESrzf38DueFJxcBEtzkhy1NO2n26ihWC9tkzP5K0FQexKj6ImIeUXFL9QdqsKY7F5koKLNcyN/JJe9</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>
