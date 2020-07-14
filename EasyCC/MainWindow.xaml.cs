@@ -20,6 +20,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using System.Xml;
 
 namespace EasyCC
 {
@@ -39,6 +40,7 @@ namespace EasyCC
         public bool SaveAllB { get; set; }
         public int SaveTimeout { get; set; } = 0;
         public string CestaSave { get; set; }
+        public Queue<Tuple<byte[], byte[]>> StoreFIFO;
         public int SaveNum { get; set; } = 0;
         public int SaveNumMax { get; set; } = 1000;
 
@@ -104,7 +106,7 @@ namespace EasyCC
             b.Source = this;
             slozkaListBox2.SetBinding(ListBox.ItemsSourceProperty, b);
             slozkaListBox2.DisplayMemberPath = "Jmeno";
-            
+
             slozkaListBox1.SelectionChanged += SlozkaListBox1_SelectionChanged;
             slozkaListBox2.SelectionChanged += SlozkaListBox_SelectionChanged;
             slozkaListBox2.MouseDoubleClick += SlozkaListBox_MouseDoubleClick;
@@ -113,7 +115,7 @@ namespace EasyCC
             MojeKamera.Connected += MojeKamera_Connected;
             MojeKamera.NewObrazekBol += MojeKamera_NewObrazekBol;
             MojeKamera.NewObrazekBolSource += MojeKamera_NewObrazekBolSource;
-            MojeKamera.NewObrazekRaw+= MojeKamera_NewObrazekRaw;
+            MojeKamera.NewObrazekRaw += MojeKamera_NewObrazekRaw;
 
             MojeKamera.Connect();
             show2D.Init(MojeKamera.Obarvovac);
@@ -139,7 +141,7 @@ namespace EasyCC
             catch { }
             slozkaListBox1.SelectedIndex = 0;
 
-            if(!MojeKamera.Pripojeno)
+            if (!MojeKamera.Pripojeno)
             {
                 MessageBox.Show("Nedostupná kamera!");
                 ThreadSafer.MakeMain(() =>
@@ -163,7 +165,7 @@ namespace EasyCC
                 {
                     kcw.DialogResult = true;
                     kcw.Close();
-                    
+
                     AppJCE.Properties.MujSettings.Default.AdresaIP = e.ToString();
                     n.AdresaIP = AppJCE.Properties.MujSettings.Default.AdresaIP;
                     AppJCE.Properties.MujSettings.Default.Save();
@@ -230,7 +232,7 @@ namespace EasyCC
         private void MojeKamera_NewObrazekBolSource(object sender, ImageHeader<short> e)
         {
             imageInfo.Init(e);
-            if(SaveAll)
+            if (SaveAll)
             {
                 //uloz header
                 var cesta = Path.Combine(CestaSave, SaveNum + ".h");
@@ -265,7 +267,7 @@ namespace EasyCC
                     sw.WriteLine("Trigger " + e.Trigger);
                     sw.WriteLine("Type " + e.Type);
                     sw.WriteLine("Width " + e.Width);
-                }                
+                }
             }
         }
         private void MojeKamera_NewObrazekBol(object sender, BitmapSource e)
@@ -298,16 +300,74 @@ namespace EasyCC
         {
             if (SaveAllB)
             {
-                //uloz obrazek
-                var cesta = Path.Combine(CestaSave, SaveNum + ".h");
-                File.WriteAllBytes(cesta, e.Item1);
-                cesta = Path.Combine(CestaSave, SaveNum + ".bin");
-                File.WriteAllBytes(cesta, e.Item2);
+                //store images to queue. Having trouble with fucking memory? Fucking buy more, motherfucker
+                StoreFIFO.Enqueue(e);
                 SaveNum++;
                 if (SaveTimeout > 0) Thread.Sleep(SaveTimeout);
-                if (SaveNum > SaveNumMax) SaveAllB = false;
+                if (SaveNum >= SaveNumMax)
+                {
+                    int last_fnum = -1;
+                    SaveAllB = false;
+
+                    Console.WriteLine("Storing images");
+                    // store all the fucking images at once, cause i've crazy motherfucking superfast pc and you have a fucking shit. Deal with it, fucker.
+                    int cnt = StoreFIFO.Count();
+                    for (int i = 0; i < cnt; i++)
+                    {
+                        Tuple<byte[], byte[]> img = StoreFIFO.Dequeue();
+                        int imgnum = i;
+                        Thread t = new Thread(() => SaveImageThreaded(imgnum, CestaSave, img));
+                        t.Start();
+                    }
+
+                    Console.WriteLine("Checking images");
+                    // check dropped frames, just to be sure, that no fucker escaped
+                    for (int i = 0; i < SaveNumMax; i++)
+                    {
+                        var path = Path.Combine(CestaSave, i.ToString("D6") + ".xml");
+                        XmlReader reader = XmlReader.Create(@path);
+                        while (reader.Read())
+                        {
+                            if (reader.IsStartElement())
+                            {
+                                if (reader.Name.ToString() == "FrameNumber")
+                                {
+                                    string sfn = reader.ReadString();
+                                    int fnum;
+                                    if (!int.TryParse(sfn, out fnum))
+                                    {
+                                        Console.WriteLine("Failed to read XML @" + i);
+                                        continue;
+                                    }
+                                    if (last_fnum > 0)
+                                    {
+                                        if ((fnum - last_fnum) > 1)
+                                        {
+                                            Console.WriteLine((fnum - last_fnum - 1) + " frame(s) dropped @" + i + " between" + last_fnum + "/" + fnum);
+                                        }
+                                        if (fnum <= last_fnum)
+                                        {
+                                            Console.WriteLine("Ordering error @" + i);
+                                        }
+                                    }
+                                    last_fnum = fnum;
+                                }
+                            }
+                        }
+                    }
+                    Console.WriteLine("Check done");
+                }
             }
         }
+
+        public static void SaveImageThreaded(int savenum, string basepath, Tuple<byte[], byte[]> e)
+        {
+            var cesta = Path.Combine(basepath, savenum.ToString("D6") + ".xml");
+            File.WriteAllBytes(cesta, e.Item1);
+            cesta = Path.Combine(basepath, savenum.ToString("D6") + ".bin");
+            File.WriteAllBytes(cesta, e.Item2);
+        }
+
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -369,7 +429,7 @@ namespace EasyCC
                 Console.WriteLine("Kamera neni pripojena!");
                 //MessageBox.Show("Kamera neni pripojena!");
                 return;
-            }        
+            }
             //string[] s = NMI._AktivniPolozka?.Text.Split('\n');
             string[] s = textBoxIn.Text.Replace("\r", "").Split('\n');
             foreach (var i in s)
@@ -387,7 +447,7 @@ namespace EasyCC
                                 var b = hb.HodnotaValid();
                                 File.WriteAllBytes(Path.Combine(BaseCesta, ss.Last()), b);
                             }
-                            catch(Exception ex) { Console.WriteLine(ex.Message); }
+                            catch (Exception ex) { Console.WriteLine(ex.Message); }
                             break;
                         case "setb":
                             hb = new HodnotaByte() { Prikaz = new MyCommand() { Hodnota = string.Join(" ", ss, 2, ss.Length - 3), SubFix = " ", Prikaz = new MyCommand() { Hodnota = ss[1], SubFix = " " } } };
@@ -439,6 +499,7 @@ namespace EasyCC
                                 SaveAll = false;
                                 SaveAllB = true;
                                 SaveTimeout = int.Parse(ss[3]);
+                                StoreFIFO = new Queue<Tuple<byte[], byte[]>>(SaveNumMax);
                             }
                             catch (Exception ex) { Console.WriteLine(ex.Message); }
                             break;
@@ -559,7 +620,7 @@ namespace EasyCC
                 SelectionChanged();
             }
         }
-        
+
         private void Help_Click(object sender, RoutedEventArgs e)
         {
             Window w = new Window();
