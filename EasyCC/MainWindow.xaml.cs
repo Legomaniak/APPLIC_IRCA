@@ -300,21 +300,9 @@ namespace EasyCC
             {
                 //uloz obrazek
                 var cesta = Path.Combine(CestaSave, SaveNum + ".h");
-                using (var fs = new FileStream(cesta, FileMode.Create))
-                {
-                    using (var bw = new BinaryWriter(fs))
-                    {
-                        bw.Write(e.Item1);
-                    }
-                }
+                File.WriteAllBytes(cesta, e.Item1);
                 cesta = Path.Combine(CestaSave, SaveNum + ".bin");
-                using (var fs = new FileStream(cesta, FileMode.Create))
-                {
-                    using (var bw = new BinaryWriter(fs))
-                    {
-                        bw.Write(e.Item2);
-                    }
-                }
+                File.WriteAllBytes(cesta, e.Item2);
                 SaveNum++;
                 if (SaveTimeout > 0) Thread.Sleep(SaveTimeout);
                 if (SaveNum > SaveNumMax) SaveAllB = false;
