@@ -4,16 +4,16 @@
 exe
 C#
 .cs
-D:\repos\APPLIC_IRCA\EasyCC\obj\Debug\
+E:\repos\APPLIC_IRCA\EasyCC\obj\Debug\
 EasyCC
 none
 false
 DEBUG;TRACE
-D:\repos\APPLIC_IRCA\EasyCC\App.xaml
+E:\repos\APPLIC_IRCA\EasyCC\App.xaml
 4893753790
 11515910493
 117387084
-162113782279
+16-1998562430
 ImageInfo.xaml;MainWindow.xaml;MyInitWindow.xaml;Nastaveni.xaml;
 
 False
