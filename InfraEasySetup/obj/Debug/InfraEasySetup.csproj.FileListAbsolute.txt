@@ -114,3 +114,11 @@ D:\cech\Documents\Visual Studio 2017\Projects\AppInfra\InfraEasySetup\obj\Debug\
 D:\cech\Documents\Visual Studio 2017\Projects\AppInfra\InfraEasySetup\obj\Debug\InfraEasySetup.exe
 D:\cech\Documents\Visual Studio 2017\Projects\AppInfra\InfraEasySetup\obj\Debug\InfraEasySetup.pdb
 D:\cech\Documents\Visual Studio 2017\Projects\AppInfra\InfraEasySetup\obj\Debug\InfraEasySetup.csprojAssemblyReference.cache
+D:\repos\APPLIC_IRCA\InfraEasySetup\obj\Debug\InfraEasySetup.csprojAssemblyReference.cache
+D:\repos\APPLIC_IRCA\InfraEasySetup\obj\Debug\ImageInfo.g.cs
+D:\repos\APPLIC_IRCA\InfraEasySetup\obj\Debug\App.g.cs
+D:\repos\APPLIC_IRCA\InfraEasySetup\obj\Debug\InfraEasySetup_Content.g.cs
+D:\repos\APPLIC_IRCA\InfraEasySetup\obj\Debug\InfraEasySetup_MarkupCompile.cache
+D:\repos\APPLIC_IRCA\InfraEasySetup\obj\Debug\InfraEasySetup_MarkupCompile.lref
+D:\repos\APPLIC_IRCA\InfraEasySetup\obj\Debug\InfraEasySetup.exe
+D:\repos\APPLIC_IRCA\InfraEasySetup\obj\Debug\InfraEasySetup.pdb
