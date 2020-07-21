@@ -78,6 +78,14 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AppJCE, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Include\AppJCE.dll</HintPath>
+    </Reference>
+    <Reference Include="ApplicInfra, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Include\ApplicInfra.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -152,16 +160,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AppInfra\ApplicInfra.csproj">
-      <Project>{161f76c1-25c3-40ab-bc65-f2e6e881d920}</Project>
-      <Name>ApplicInfra</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AppJCE\AppJCE.csproj">
-      <Project>{5cd5947f-b84e-4d2f-a2b8-0286e15ece90}</Project>
-      <Name>AppJCE</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.1">
