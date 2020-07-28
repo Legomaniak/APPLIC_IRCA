@@ -1,5 +1,0 @@
-﻿2020-07-21 07:40:58,634 [1] INFO  MainLog [(null)] - Logger MainLog initialized successfuly. Using configuration file D:\repos\APPLIC_IRCA\InfraEasySetup\bin\Debug\MainLog.log4net.
-2020-07-21 07:40:58,681 [1] DEBUG MainLog [(null)] - PripojujiKameru, Calling method:AppJCE.Vypis.Debug (line 19)
-2020-07-21 07:40:59,138 [1] ERROR MainLog [(null)] - System.Exception: Camera Ping error
-   at ApplicInfra.Infra.Kamera.Connect(IPAddress ip) in D:\cech\Documents\Visual Studio 2017\Projects\AppInfra\AppInfra\Infra\Kamera.cs:line 680, Calling method:AppJCE.Vypis.Error (line 38)
-2020-07-21 07:41:04,510 [1] DEBUG MainLog [(null)] - OdpojujiKameru, Calling method:AppJCE.Vypis.Debug (line 19)

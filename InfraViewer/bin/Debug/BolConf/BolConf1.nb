@@ -1,9 +1,0 @@
-[NastaveniBolometru]
-Jmeno = Default
-GSK = 0
-GFID = 3771
-INT = 306
-VBUS = 2613
-VDET = 3071
-AVG = 16
-OFF = 4000

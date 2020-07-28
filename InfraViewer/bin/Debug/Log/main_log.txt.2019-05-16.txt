@@ -1,6 +1,0 @@
-﻿2019-05-16 09:21:16,076 [1] INFO  MainLog [(null)] - Logger MainLog initialized successfuly. Using configuration file C:\Users\cech.jiri\Documents\Visual Studio 2017\Projects\AppInfra\InfraViewer\bin\Debug\MainLog.log4net.
-2019-05-16 09:21:16,106 [1] DEBUG MainLog [(null)] - PripojujiKameru, Calling method:AppJCE.Vypis.Debug (line 19)
-2019-05-16 09:21:16,126 [1] DEBUG MainLog [(null)] - OnACConnected, Calling method:AppJCE.Vypis.Debug (line 19)
-2019-05-16 09:21:16,176 [1] DEBUG MainLog [(null)] - Moje kamera: IRCA3v181005r, Calling method:AppJCE.Vypis.Debug (line 19)
-2019-05-16 09:21:20,470 [1] DEBUG MainLog [(null)] - OdpojujiKameru, Calling method:AppJCE.Vypis.Debug (line 19)
-2019-05-16 09:21:21,018 [7] DEBUG MainLog [(null)] - Konec pripojeni, Calling method:AppJCE.Vypis.Debug (line 19)
