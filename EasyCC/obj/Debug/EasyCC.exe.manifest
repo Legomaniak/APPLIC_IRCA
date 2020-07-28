@@ -50,7 +50,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>0swSiRLQj78yWIQoeRT3t9cAy8IbPY0y3o+fUuGe5xw=</dsig:DigestValue>
+        <dsig:DigestValue>o9iiF43OC1qDwJAA0+xpSPhBNqvvv88vMmEyQpdKte4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -62,19 +62,19 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>86eptXDHtxGZtlkTTUtgK2hBjKK6wrOofUHqCdBwkvQ=</dsig:DigestValue>
+        <dsig:DigestValue>QXZOhrEMnlsJ0MvXBK8d+14oq/YPcLsmqXLV0ROq26g=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="EasyCC.exe" size="106496">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="EasyCC.exe" size="107520">
       <assemblyIdentity name="EasyCC" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>RjNRI7mOCenbd5OL3kZyN7HpDbS6hLRSEk3EffeqYME=</dsig:DigestValue>
+        <dsig:DigestValue>vc1CsBjvGZVFDegUpyuMEUATkyTYDP21b+eNvmOtPZs=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
