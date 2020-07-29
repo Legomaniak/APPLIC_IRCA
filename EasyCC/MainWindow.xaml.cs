@@ -303,6 +303,8 @@ namespace EasyCC
                 //store images to queue. Having trouble with fucking memory? Fucking buy more, motherfucker
                 StoreFIFO.Enqueue(e);
                 SaveNum++;
+                double done = 100 * SaveNum / SaveNumMax;
+                Console.Write(done.ToString("F2") + "%" + "\r");
                 if (SaveTimeout > 0) Thread.Sleep(SaveTimeout);
                 if (SaveNum >= SaveNumMax)
                 {
@@ -312,16 +314,22 @@ namespace EasyCC
                     Console.WriteLine("Storing images");
                     // store all the fucking images at once, cause i've crazy motherfucking superfast pc and you have a fucking shit. Deal with it, fucker.
                     int cnt = StoreFIFO.Count();
+
+                    Task[] tasks = new Task[cnt];
                     for (int i = 0; i < cnt; i++)
                     {
                         Tuple<byte[], byte[]> img = StoreFIFO.Dequeue();
                         int imgnum = i;
-                        Thread t = new Thread(() => SaveImageThreaded(imgnum, CestaSave, img));
-                        t.Start();
+                        tasks[i] = Task.Factory.StartNew(() =>
+                        {
+                            SaveImageThreaded(imgnum, CestaSave, img);
+                        });
                     }
+                    while (tasks.Any(t => !t.IsCompleted)) { } //spin wait
 
                     Console.WriteLine("Checking images");
                     // check dropped frames, just to be sure, that no fucker escaped
+                    bool order_ok = true;
                     for (int i = 0; i < SaveNumMax; i++)
                     {
                         var path = Path.Combine(CestaSave, i.ToString("D6") + ".xml");
@@ -348,6 +356,7 @@ namespace EasyCC
                                         if (fnum <= last_fnum)
                                         {
                                             Console.WriteLine("Ordering error @" + i);
+                                            order_ok = false;
                                         }
                                     }
                                     last_fnum = fnum;
@@ -356,6 +365,14 @@ namespace EasyCC
                         }
                     }
                     Console.WriteLine("Check done");
+                    if (order_ok)
+                    {
+                        Console.Beep(440, 1000);
+                    }
+                    else
+                    {
+                        Console.Beep(4400, 1000);
+                    }
                 }
             }
         }
@@ -496,6 +513,9 @@ namespace EasyCC
                                 if (!Directory.Exists(CestaSave)) Directory.CreateDirectory(CestaSave);
                                 SaveNum = 0;
                                 SaveNumMax = int.Parse(ss[2]);
+                                Console.WriteLine("Original maximgcnt: " + MojeKamera.MaxImgCnt.ToString());
+                                MojeKamera.MaxImgCnt = 2 * SaveNumMax;
+                                Console.WriteLine("New maximgcnt: " + MojeKamera.MaxImgCnt.ToString());
                                 SaveAll = false;
                                 SaveAllB = true;
                                 SaveTimeout = int.Parse(ss[3]);
