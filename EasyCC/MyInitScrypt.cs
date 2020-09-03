@@ -1,9 +1,11 @@
 ﻿using AppJCE.Ini;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace EasyCC
 {
@@ -48,5 +50,49 @@ namespace EasyCC
                 source += Text;
             }
         }
+        public void LoadXML(string cesta)
+        {
+            var XR = XmlReader.Create(cesta);
+            while (XR.Read())
+            {
+                switch (XR.NodeType)
+                {
+                    case XmlNodeType.Element:
+                        switch (XR.Name)
+                        {
+                            case "Jmeno":
+                                XR.Read();
+                                Jmeno = XR.Value;
+                                XR.Read();
+                                break;
+                            case "Cislo":
+                                XR.Read();
+                                Cislo = int.Parse(XR.Value);
+                                XR.Read();
+                                break;
+                            case "Kategorie":
+                                XR.Read();
+                                Kategorie = XR.Value;
+                                XR.Read();
+                                break;
+                            case "Text":
+                                XR.Read();
+                                Text = XR.Value;
+                                XR.Read();
+                                break;
+                        }
+                        break;
+                }
+            }
+        }
+        public void SaveXML(string cesta)
+        {
+            var XW = XmlWriter.Create(cesta);
+            XW.WriteElementString("Jmeno", Jmeno);
+            XW.WriteElementString("Cislo", Cislo.ToString());
+            XW.WriteElementString("Kategorie", Kategorie);
+            XW.WriteElementString("Text", Text);
+        }
+
     }
 }
