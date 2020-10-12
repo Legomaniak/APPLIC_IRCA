@@ -144,8 +144,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="InfraEasySetup_1_TemporaryKey.pfx" />
-    <None Include="InfraEasySetup_TemporaryKey.pfx" />
     <Content Include="Kamera.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

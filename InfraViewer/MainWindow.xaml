@@ -8,6 +8,7 @@
     xmlns:AppJCE="clr-namespace:AppJCE;assembly=AppJCE"
     xmlns:Controls="clr-namespace:ApplicInfra.Infra.Controls;assembly=ApplicInfra"
     xmlns:Infra="clr-namespace:ApplicInfra.Infra;assembly=ApplicInfra"
+    xmlns:Hyper="clr-namespace:ApplicHyper.Hyper.Controls;assembly=ApplicHyper"
     xmlns:local="clr-namespace:InfraViewer"
     x:Class="InfraViewer.MainWindow"
         mc:Ignorable="d"
@@ -39,9 +40,15 @@
                 <Controls:ControlKamera x:Name="controlKamera"/>
                 <!--<Button Height="25" Content="Correction" Click="Correction"/>-->
                 <Controls:ControlCorrection x:Name="corr" Content="Plain Correction" Height="25"/>
-                <Separator Visibility="Hidden"/>
-                <AppJCE:ControlCesta x:Name="cc" Height="25"/>
-                <Button Height="25" Content="Save" Click="Save"/>
+                <GroupBox Header="Save image">
+                    <StackPanel>
+                    <AppJCE:ControlCesta x:Name="cc" Height="25"/>
+                    <Button Height="25" Content="Save" Click="Save"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="Save image sequence">
+                    <Hyper:ControlHCubeQuickSaver x:Name="HCQ"/>
+                </GroupBox>
             </StackPanel>
             <local:ImageInfo x:Name="ii" Height="76" VerticalAlignment="Bottom" Grid.Column="1"/>
 

@@ -87,13 +87,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Include\AppJCE.dll</HintPath>
     </Reference>
+    <Reference Include="ApplicHyper">
+      <HintPath>..\Include\ApplicHyper.dll</HintPath>
+    </Reference>
     <Reference Include="ApplicInfra, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Include\ApplicInfra.dll</HintPath>
     </Reference>
-    <Reference Include="Nini, Version=1.1.0.0, Culture=neutral, PublicKeyToken=691faec150a7fa7b, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Applic.Utils\IniFiles\Nini.dll</HintPath>
+    <Reference Include="Nini">
+      <HintPath>..\Include\Nini.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
