@@ -67,7 +67,7 @@ namespace InfraEasySetup
             MojeKamera.Connected += MojeKamera_Connected;
             MojeKamera.NewObrazekBol += MojeKamera_NewObrazekBol;
             MojeKamera.NewObrazekBolSource += MojeKamera_NewObrazekBolSource;
-
+            MojeKamera.KontrolniFrekvencePripojeni = 20000;
 
             var BaseCesta = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "IRCAapp");
             if (!Directory.Exists(BaseCesta)) Directory.CreateDirectory(BaseCesta);
@@ -85,6 +85,7 @@ namespace InfraEasySetup
 
             bolometerFastSetup.Init(nb);
             controlGMSGain.Init(gms);
+            controlKameraIQ.Init(MojeKamera);
 
             MojeKamera.InitOvladace();
 
@@ -137,8 +138,8 @@ namespace InfraEasySetup
         }
 
         public void MojeKamera_NewObrazekBol(object sender, BitmapSource e)
-        {           
-            lock(MonitorLock)
+        {
+            lock (MonitorLock)
             {
                 if (Monitor == null) ov.Zobraz(e);
                 else Monitor.Zobraz(e);
@@ -147,6 +148,7 @@ namespace InfraEasySetup
 
         public void MojeKamera_NewObrazekBolSource(object sender, ImageHeader<short> e)
         {
+            controlImageHeadeMini.Init(e);
             //ii.Set(e);
             Obrazek = e;
             //ThreadSafer.MakeSTA(controlROI, delegate () { controlROI.Init(e); });
@@ -190,6 +192,7 @@ namespace InfraEasySetup
                     //    Close();
                     //}
                 });
+                return;
             }
             if (!MojeKamera.Pripojeno)
             {
@@ -223,7 +226,6 @@ namespace InfraEasySetup
                 controlROI.RegenerateMask();
 
                 Korekce.Send(1);
-
             }
         }
         

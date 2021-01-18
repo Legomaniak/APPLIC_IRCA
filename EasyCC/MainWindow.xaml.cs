@@ -264,7 +264,9 @@ namespace EasyCC
                     sw.WriteLine("TemperatureADCBol " + e.TemperatureADCBol);
                     sw.WriteLine("TemperatureBol " + e.TemperatureBol);
                     sw.WriteLine("TimeStamp " + e.TimeStamp);
-                    sw.WriteLine("Trigger " + e.Trigger);
+                    sw.WriteLine("ResolvedTrigger " + e.ResolvedTrigger);
+                    sw.WriteLine("TriggerA " + e.TriggerA);
+                    sw.WriteLine("TriggerB " + e.TriggerB);
                     sw.WriteLine("Type " + e.Type);
                     sw.WriteLine("Width " + e.Width);
                 }
