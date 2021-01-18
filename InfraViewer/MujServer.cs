@@ -135,7 +135,7 @@ namespace InfraViewer
                             float k = float.Parse(s[i++]);
                             int t = int.Parse(s[i++]);
                             int l = (int)((p2 - p1) / k);
-                            for (int j = 0; i < l; i++)
+                            for (i = 0; i < l; i++)
                             {
                                 //MW.motor.SetPozice((p1 + k * j));
                                 MW.Obrazek = null;

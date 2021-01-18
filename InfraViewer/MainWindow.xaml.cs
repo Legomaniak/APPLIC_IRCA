@@ -57,6 +57,7 @@ namespace InfraViewer
         }
         public bool SaveRaw = false;
         private string cestaIni = "";
+        ApplicHyper.Hyper.HyperCubeManager hcm = null;
         public MainWindow()
         {
             InitializeComponent();
@@ -119,7 +120,10 @@ namespace InfraViewer
 
             Korekce = MojeKamera.MojeHodnoty[HodnotyKameryBit.SetOffset];
 
-            MojeKamera.Connect();            
+            MojeKamera.Connect();
+
+            hcm = new ApplicHyper.Hyper.HyperCubeManager();
+            HCQ.Init(hcm);
         }
 
         private void Cc_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -172,6 +176,7 @@ namespace InfraViewer
         {
             ii?.Set(e);
             Obrazek = e;
+            hcm?.Show(e);
         }
 
         public void MojeKamera_Connected(object sender, bool e)
