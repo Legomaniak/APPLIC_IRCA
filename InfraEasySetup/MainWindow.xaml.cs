@@ -302,13 +302,13 @@ namespace InfraEasySetup
         {
             try
             {
-                var Obrazek = ov.Obrazek;
+                //var Obrazek = ov.Obrazek;
                 string cesta = MojeCesta.VyberCestuSave("obrazek", "Binary (*.bin)|*.bin");
                 using (var wb = new BinaryWriter(new FileStream(cesta, FileMode.Create)))
                 {
-                    var X = Obrazek.GetLength(0);
+                    var X = Obrazek.Width;
                     wb.Write(X);
-                    var Y = Obrazek.GetLength(1);
+                    var Y = Obrazek.Height;
                     wb.Write(Y);
                     for (int x = 0; x < X; x++)
                     {
