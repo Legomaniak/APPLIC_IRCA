@@ -185,14 +185,21 @@ namespace InfraViewer
             if (!MojeKamera.Pripojeno) MessageBox.Show(NastaveniInfraViewer.KameraNepripojena);
             else
             {
-                StreamReader sr = new StreamReader(cestaIni);
-                string radek = sr.ReadLine();
-                while (radek != null)
+                try
                 {
-                    if (!string.IsNullOrEmpty(radek)) MojeKamera.CC.AddComand(radek, Resp);
-                    radek = sr.ReadLine();
+                    StreamReader sr = new StreamReader(cestaIni);
+                    string radek = sr.ReadLine();
+                    while (radek != null)
+                    {
+                        if (!string.IsNullOrEmpty(radek)) MojeKamera.CC.AddComand(radek, Resp);
+                        radek = sr.ReadLine();
+                    }
+                    sr.Close();
                 }
-                sr.Close();
+                catch
+                {
+                    Console.WriteLine("init file error");
+                }
             }
 
             //Korekce = MojeKamera.MojeHodnoty[HodnotyKameryBit.SetOffset];
