@@ -28,19 +28,25 @@
             <Infra:ObrazekViewFull x:Name="ov"/>
         </GroupBox>
         <ScrollViewer Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Margin="0,0,0,35" VerticalScrollBarVisibility="Auto">
-        <StackPanel>
-            <GroupBox Header="Settings">
-                <StackPanel>
-                    <Controls:BolometerControl3 x:Name="bolometerControl"/>
-                    <Controls:ControlGMSGain x:Name="controlGMSGain" HorizontalAlignment="Left"/>
-                    <Controls:ControlCorrection x:Name="corr" Content="Plain Correction"/>
-                    <Controls:BolometerFastSetup x:Name="bolometerFastSetup" />
-                </StackPanel>
-            </GroupBox>
-        <GroupBox Header="ROI">
-                <Zobrazeni:ControlROI x:Name="controlROI"/>
-            </GroupBox>
-        </StackPanel>
+            <StackPanel>
+                <GroupBox Header="Settings">
+                    <StackPanel>
+                        <Controls:BolometerControl3 x:Name="bolometerControl"/>
+                        <Controls:ControlGMSGain x:Name="controlGMSGain" HorizontalAlignment="Left"/>
+                        <Controls:ControlCorrection x:Name="corr" Content="Plain Correction"/>
+                        <Controls:BolometerFastSetup x:Name="bolometerFastSetup" />
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="Info">
+                    <StackPanel>
+                        <Infra:ControlImageHeadeMini x:Name="controlImageHeadeMini"/>
+                        <Infra:ControlKameraIQ x:Name="controlKameraIQ"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="ROI">
+                    <Zobrazeni:ControlROI x:Name="controlROI"/>
+                </GroupBox>
+            </StackPanel>
         </ScrollViewer>
         <GroupBox Header="Graphs" Grid.Row="2">
             <Zobrazeni:Show1D x:Name="graph1d"/>

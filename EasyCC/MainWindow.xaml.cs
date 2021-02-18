@@ -116,6 +116,7 @@ namespace EasyCC
             MojeKamera.NewObrazekBol += MojeKamera_NewObrazekBol;
             MojeKamera.NewObrazekBolSource += MojeKamera_NewObrazekBolSource;
             MojeKamera.NewObrazekRaw += MojeKamera_NewObrazekRaw;
+            MojeKamera.NewObrazekBolSource4 += MojeKamera_NewObrazekBolSource4;
 
             MojeKamera.Connect();
             show2D.Init(MojeKamera.Obarvovac);
@@ -229,6 +230,16 @@ namespace EasyCC
             }
         }
 
+        private void MojeKamera_NewObrazekBolSource4(object sender, ImageHeader<uint> e)
+        {
+            imageInfo.Init(e);
+            if (SaveAll)
+            {
+                //uloz header
+                var cesta = Path.Combine(CestaSave, SaveNum + ".h");
+                File.WriteAllText(cesta, e.Source);
+            }
+        }
         private void MojeKamera_NewObrazekBolSource(object sender, ImageHeader<short> e)
         {
             imageInfo.Init(e);
@@ -236,38 +247,41 @@ namespace EasyCC
             {
                 //uloz header
                 var cesta = Path.Combine(CestaSave, SaveNum + ".h");
-                using (StreamWriter sw = new StreamWriter(File.Create(cesta)))
-                {
-                    sw.WriteLine("Average " + e.Average);
-                    sw.WriteLine("BitsPerPixel " + e.BitsPerPixel);
-                    sw.WriteLine("ByteSize " + e.ByteSize);
-                    sw.WriteLine("CameraID " + e.CameraID);
-                    sw.WriteLine("ColoringMaximum " + e.ColoringMaximum);
-                    sw.WriteLine("ColoringMinimum " + e.ColoringMinimum);
-                    sw.WriteLine("Data " + e.Data);
-                    sw.WriteLine("DNA " + e.DNA);
-                    sw.WriteLine("Firmware " + e.Firmware);
-                    sw.WriteLine("Height " + e.Height);
-                    sw.WriteLine("HWResolutionX " + e.HWResolutionX);
-                    sw.WriteLine("HWResolutionY " + e.HWResolutionY);
-                    sw.WriteLine("ImageFlags " + e.ImageFlags);
-                    sw.WriteLine("ImageNumber " + e.ImageNumber);
-                    sw.WriteLine("IsReadOnly " + e.IsReadOnly);
-                    sw.WriteLine("Length " + e.Length);
-                    sw.WriteLine("Maximum " + e.Maximum);
-                    sw.WriteLine("Minimum " + e.Minimum);
-                    sw.WriteLine("PixelByteStride " + e.PixelByteStride);
-                    sw.WriteLine("Popis " + e.Popis);
-                    sw.WriteLine("StartX " + e.StartX);
-                    sw.WriteLine("StartY " + e.StartY);
-                    sw.WriteLine("Sum " + e.Sum);
-                    sw.WriteLine("TemperatureADCBol " + e.TemperatureADCBol);
-                    sw.WriteLine("TemperatureBol " + e.TemperatureBol);
-                    sw.WriteLine("TimeStamp " + e.TimeStamp);
-                    sw.WriteLine("Trigger " + e.Trigger);
-                    sw.WriteLine("Type " + e.Type);
-                    sw.WriteLine("Width " + e.Width);
-                }
+                File.WriteAllText(cesta, e.Source);
+                //using (StreamWriter sw = new StreamWriter(File.Create(cesta)))
+                //{
+                //    sw.WriteLine("Average " + e.Average);
+                //    sw.WriteLine("BitsPerPixel " + e.BitsPerPixel);
+                //    sw.WriteLine("ByteSize " + e.ByteSize);
+                //    sw.WriteLine("CameraID " + e.CameraID);
+                //    sw.WriteLine("ColoringMaximum " + e.ColoringMaximum);
+                //    sw.WriteLine("ColoringMinimum " + e.ColoringMinimum);
+                //    sw.WriteLine("Data " + e.Data);
+                //    sw.WriteLine("DNA " + e.DNA);
+                //    sw.WriteLine("Firmware " + e.Firmware);
+                //    sw.WriteLine("Height " + e.Height);
+                //    sw.WriteLine("HWResolutionX " + e.HWResolutionX);
+                //    sw.WriteLine("HWResolutionY " + e.HWResolutionY);
+                //    sw.WriteLine("ImageFlags " + e.ImageFlags);
+                //    sw.WriteLine("ImageNumber " + e.ImageNumber);
+                //    sw.WriteLine("IsReadOnly " + e.IsReadOnly);
+                //    sw.WriteLine("Length " + e.Length);
+                //    sw.WriteLine("Maximum " + e.Maximum);
+                //    sw.WriteLine("Minimum " + e.Minimum);
+                //    sw.WriteLine("PixelByteStride " + e.PixelByteStride);
+                //    sw.WriteLine("Popis " + e.Popis);
+                //    sw.WriteLine("StartX " + e.StartX);
+                //    sw.WriteLine("StartY " + e.StartY);
+                //    sw.WriteLine("Sum " + e.Sum);
+                //    sw.WriteLine("TemperatureADCBol " + e.TemperatureADCBol);
+                //    sw.WriteLine("TemperatureBol " + e.TemperatureBol);
+                //    sw.WriteLine("TimeStamp " + e.TimeStamp);
+                //    sw.WriteLine("ResolvedTrigger " + e.ResolvedTrigger);
+                //    sw.WriteLine("TriggerA " + e.TriggerA);
+                //    sw.WriteLine("TriggerB " + e.TriggerB);
+                //    sw.WriteLine("Type " + e.Type);
+                //    sw.WriteLine("Width " + e.Width);
+                //}
             }
         }
         private void MojeKamera_NewObrazekBol(object sender, BitmapSource e)
