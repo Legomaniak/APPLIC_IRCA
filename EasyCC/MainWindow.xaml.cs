@@ -317,7 +317,7 @@ namespace EasyCC
                 //store images to queue. Having trouble with fucking memory? Fucking buy more, motherfucker
                 StoreFIFO.Enqueue(e);
                 SaveNum++;
-                double done = 100 * SaveNum / SaveNumMax;
+                double done = 100.0 * SaveNum / SaveNumMax;
                 Console.Write(done.ToString("F2") + "%" + "\r");
                 if (SaveTimeout > 0) Thread.Sleep(SaveTimeout);
                 if (SaveNum >= SaveNumMax)
