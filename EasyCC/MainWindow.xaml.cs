@@ -560,6 +560,16 @@ namespace EasyCC
                                     case "cor"://nic nedela
                                         MojeKamera.Corr = ss[2] == "1";
                                         break;
+                                    case "color":
+                                        if (uint.TryParse(ss[2], out uint barva))
+                                        {
+                                            if (MojeKamera.Obarvovac.ColorPalete.Seznam.Count > barva)
+                                            {
+                                                MojeKamera.Obarvovac.ColorPalete.AktivniPolozka = (int)barva;
+                                                //MojeKamera.Obarvovac.SetColoring();//called automaticaly from change of AktivniPolozka
+                                            }
+                                        }
+                                        break;
                                     default:
                                         break;
                                 }
