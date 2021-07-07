@@ -471,7 +471,7 @@ namespace EasyCC
                     switch (ss[0].ToLower())
                     {
                         case "getb":
-                            var hb = new HodnotaByte() { Prikaz = new MyCommand() { Hodnota = string.Join(" ", ss, 2, ss.Length - 3), SubFix = " ", Prikaz = new MyCommand() { Hodnota = ss[1], SubFix = " " } } };
+                            var hb = new CameraCommandByte() { Prikaz = new MyCommand() { Hodnota = string.Join(" ", ss, 2, ss.Length - 3), SubFix = " ", Prikaz = new MyCommand() { Hodnota = ss[1], SubFix = " " } } };
                             hb.CC = MojeKamera.CC;
                             try
                             {
@@ -481,7 +481,7 @@ namespace EasyCC
                             catch (Exception ex) { Console.WriteLine(ex.Message); }
                             break;
                         case "setb":
-                            hb = new HodnotaByte() { Prikaz = new MyCommand() { Hodnota = string.Join(" ", ss, 2, ss.Length - 3), SubFix = " ", Prikaz = new MyCommand() { Hodnota = ss[1], SubFix = " " } } };
+                            hb = new CameraCommandByte() { Prikaz = new MyCommand() { Hodnota = string.Join(" ", ss, 2, ss.Length - 3), SubFix = " ", Prikaz = new MyCommand() { Hodnota = ss[1], SubFix = " " } } };
                             hb.CC = MojeKamera.CC;
                             try
                             {

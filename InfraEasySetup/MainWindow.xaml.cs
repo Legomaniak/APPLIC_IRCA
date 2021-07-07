@@ -34,7 +34,7 @@ namespace InfraEasySetup
         Action<ClientCommandResponse> Resp = null;
         KameraConnectWindow kcw;
         public ImageHeader<short> Obrazek = null;
-        public HodnotaBit Korekce = null;
+        public CameraCommandBit Korekce = null;
         object MonitorLock = new object();
         public ObrazekView Monitor = null;
 
@@ -217,12 +217,12 @@ namespace InfraEasySetup
                 else Console.WriteLine(file + " not exist");
 
 
-                Korekce = MojeKamera.MojeHodnoty[HodnotyKameryBit.SetOffset];
+                Korekce = MojeKamera.MojeHodnoty[CameraValuesBit.NUCcomputeOffset];
 
                 DefaultSettings(null, null);
 
-                controlROI.MaxX = (int)MojeKamera.MojeHodnoty[HodnotyKameryInt.Width].HodnotaValid;
-                controlROI.MaxY = (int)MojeKamera.MojeHodnoty[HodnotyKameryInt.Height].HodnotaValid;
+                controlROI.MaxX = (int)MojeKamera.MojeHodnoty[CameraValuesInt.ImageWidth].HodnotaValid;
+                controlROI.MaxY = (int)MojeKamera.MojeHodnoty[CameraValuesInt.ImageHeight].HodnotaValid;
                 controlROI.RegenerateMask();
 
                 Korekce.Send(1);

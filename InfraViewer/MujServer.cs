@@ -151,25 +151,25 @@ namespace InfraViewer
                                     MW.SaveRaw = bool.Parse(s[2]);
                                     return odpovedOk + SW.ElapsedMilliseconds;
                                 case "INT":
-                                    MW.MojeKamera.MojeHodnoty.Get(HodnotyKameryInt.INT).Hodnota = int.Parse(s[2]);
+                                    MW.MojeKamera.MojeHodnoty.Get(CameraValuesInt.BolometerINT).Hodnota = int.Parse(s[2]);
                                     return odpovedOk + SW.ElapsedMilliseconds;
                                 case "GSK":
-                                    MW.MojeKamera.MojeHodnoty.Get(HodnotyKameryInt.GSK).Hodnota = int.Parse(s[2]);
+                                    MW.MojeKamera.MojeHodnoty.Get(CameraValuesInt.BolometerGSK).Hodnota = int.Parse(s[2]);
                                     return odpovedOk + SW.ElapsedMilliseconds;
                                 case "GFD":
-                                    MW.MojeKamera.MojeHodnoty.Get(HodnotyKameryInt.GFID).Hodnota = int.Parse(s[2]);
+                                    MW.MojeKamera.MojeHodnoty.Get(CameraValuesInt.BolometerGFID).Hodnota = int.Parse(s[2]);
                                     return odpovedOk + SW.ElapsedMilliseconds;
                                 case "VBS":
-                                    MW.MojeKamera.MojeHodnoty.Get(HodnotyKameryInt.VBUS).Hodnota = int.Parse(s[2]);
+                                    MW.MojeKamera.MojeHodnoty.Get(CameraValuesInt.BolometerVBUS).Hodnota = int.Parse(s[2]);
                                     return odpovedOk + SW.ElapsedMilliseconds;
                                 case "VDT":
-                                    MW.MojeKamera.MojeHodnoty.Get(HodnotyKameryInt.VDET).Hodnota = int.Parse(s[2]);
+                                    MW.MojeKamera.MojeHodnoty.Get(CameraValuesInt.BolometerVDET).Hodnota = int.Parse(s[2]);
                                     return odpovedOk + SW.ElapsedMilliseconds;
                                 case "AVG":
-                                    MW.MojeKamera.MojeHodnoty.Get(HodnotyKameryInt.AVG).Hodnota = int.Parse(s[2]);
+                                    MW.MojeKamera.MojeHodnoty.Get(CameraValuesInt.NUCcomputationFrames).Hodnota = int.Parse(s[2]);
                                     return odpovedOk + SW.ElapsedMilliseconds;
                                 case "OFF":
-                                    MW.MojeKamera.MojeHodnoty.Get(HodnotyKameryInt.OFF).Hodnota = int.Parse(s[2]);
+                                    MW.MojeKamera.MojeHodnoty.Get(CameraValuesInt.NUCzeroOffset).Hodnota = int.Parse(s[2]);
                                     return odpovedOk + SW.ElapsedMilliseconds;
                                 case "COC":
                                     MW.Korekce?.Send(1);
@@ -178,7 +178,7 @@ namespace InfraViewer
                                     MW.corr?.ControlCorrection_Click(null, null);
                                     return odpovedOk + SW.ElapsedMilliseconds;
                                 case "SE":
-                                    MW.MojeKamera.MojeHodnoty.Get(HodnotyKameryBool.ShutterEna).Hodnota = bool.Parse(s[2]);
+                                    MW.MojeKamera.MojeHodnoty.Get(CameraValuesBool.ShutterEnable).Hodnota = bool.Parse(s[2]);
                                     return odpovedOk + SW.ElapsedMilliseconds;
                                 //case "TE":
                                 //    MW.mcb1.Hodnota.Hodnota = bool.Parse(s[2]);
@@ -203,15 +203,16 @@ namespace InfraViewer
                                     MW.cc.VybranaCesta = cesticka;
                                     return odpovedOk + SW.ElapsedMilliseconds;
                                 case "COR":
-                                    if(bool.Parse(s[2]))
+                                    if (bool.Parse(s[2]))
                                     {
-                                        MW.MojeKamera.MojeHodnoty.Get(HodnotyKameryInt.Destination).Hodnota = 32;
-                                        MW.MojeKamera.MojeHodnoty.Get(HodnotyKameryBit.UpdateSetup).Hodnota = 1;
+                                        MW.MojeKamera.MojeHodnoty.Get(CameraValuesInt3.ImageDestination).Hodnota = new Tuple<long, long, long>((long)EDestination1.SensorCapture, (long)EDestination2.Accelerator, (long)EDestination3.Move);
+                                        MW.MojeKamera.MojeHodnoty.Get(CameraValuesInt3.ImageDestination).Hodnota = new Tuple<long, long, long>((long)EDestination1.Accelerator, (long)EDestination2.Ethernet, (long)EDestination3.Move);
+                                        MW.MojeKamera.MojeHodnoty.Get(CameraValuesBit.ImageUpdateSetup).Hodnota = 1;
                                     }
                                     else
                                     {
-                                        MW.MojeKamera.MojeHodnoty.Get(HodnotyKameryInt.Destination).Hodnota = 16;
-                                        MW.MojeKamera.MojeHodnoty.Get(HodnotyKameryBit.UpdateSetup).Hodnota = 1;
+                                        MW.MojeKamera.MojeHodnoty.Get(CameraValuesInt3.ImageDestination).Hodnota = new Tuple<long, long, long>((long)EDestination1.SensorCapture, (long)EDestination2.Ethernet, (long)EDestination3.Move);
+                                        MW.MojeKamera.MojeHodnoty.Get(CameraValuesBit.ImageUpdateSetup).Hodnota = 1;
                                     }
                                     return odpovedOk + SW.ElapsedMilliseconds;
                                 case "IA":
@@ -226,21 +227,21 @@ namespace InfraViewer
                                 case "ON":
                                     return odpovedOk + MW.MojeKamera.Pripojeno;
                                 case "INT":                                    
-                                    return odpovedOk + MW.MojeKamera.MojeHodnoty.Get(HodnotyKameryInt.INT).Hodnota;
+                                    return odpovedOk + MW.MojeKamera.MojeHodnoty.Get(CameraValuesInt.BolometerINT).Hodnota;
                                 case "GSK":
-                                    return odpovedOk + MW.MojeKamera.MojeHodnoty.Get(HodnotyKameryInt.GSK).Hodnota;
+                                    return odpovedOk + MW.MojeKamera.MojeHodnoty.Get(CameraValuesInt.BolometerGSK).Hodnota;
                                 case "GFD":
-                                    return odpovedOk + MW.MojeKamera.MojeHodnoty.Get(HodnotyKameryInt.GFID).Hodnota;
+                                    return odpovedOk + MW.MojeKamera.MojeHodnoty.Get(CameraValuesInt.BolometerGFID).Hodnota;
                                 case "VBS":
-                                    return odpovedOk + MW.MojeKamera.MojeHodnoty.Get(HodnotyKameryInt.VBUS).Hodnota;
+                                    return odpovedOk + MW.MojeKamera.MojeHodnoty.Get(CameraValuesInt.BolometerVBUS).Hodnota;
                                 case "VDT":
-                                    return odpovedOk + MW.MojeKamera.MojeHodnoty.Get(HodnotyKameryInt.VDET).Hodnota;
+                                    return odpovedOk + MW.MojeKamera.MojeHodnoty.Get(CameraValuesInt.BolometerVDET).Hodnota;
                                 case "AVG":
-                                    return odpovedOk + MW.MojeKamera.MojeHodnoty.Get(HodnotyKameryInt.AVG).Hodnota;
+                                    return odpovedOk + MW.MojeKamera.MojeHodnoty.Get(CameraValuesInt.NUCcomputationFrames).Hodnota;
                                 case "OFF":
-                                    return odpovedOk + MW.MojeKamera.MojeHodnoty.Get(HodnotyKameryInt.OFF).Hodnota;
+                                    return odpovedOk + MW.MojeKamera.MojeHodnoty.Get(CameraValuesInt.NUCzeroOffset).Hodnota;
                                 case "SE":
-                                    return odpovedOk + MW.MojeKamera.MojeHodnoty.Get(HodnotyKameryBool.ShutterEna).Hodnota;
+                                    return odpovedOk + MW.MojeKamera.MojeHodnoty.Get(CameraValuesBool.ShutterEnable).Hodnota;
                                 //case "TE":
                                 //    return odpovedOk + MW.mcb1.Hodnota.Hodnota;
                                 case "KC":
@@ -253,8 +254,8 @@ namespace InfraViewer
                                     return odpovedOk + MW.MojeKamera.Average;
                                 case "RAW":
                                     return odpovedOk + MW.SaveRaw;
-                                case "COR":
-                                    return odpovedOk + (MW.MojeKamera.MojeHodnoty.Get(HodnotyKameryInt.Destination).Hodnota == 32);
+                                //case "COR":
+                                //    return odpovedOk + (MW.MojeKamera.MojeHodnoty.Get(CameraValuesInt.Destination).Hodnota == 32);
                                 case "CS":
                                     return odpovedOk + MW.cc.VybranaCesta;
                                 default:

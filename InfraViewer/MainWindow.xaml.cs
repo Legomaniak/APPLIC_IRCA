@@ -32,7 +32,7 @@ namespace InfraViewer
         Action<ClientCommandResponse> Resp = null;
         KameraConnectWindow kcw;
         public ImageHeader<short> Obrazek = null;
-        public HodnotaBit Korekce = null;
+        public CameraCommandBit Korekce = null;
 
         public int Counter = 0;
         public int CounterRaw = 0;
@@ -118,7 +118,7 @@ namespace InfraViewer
             MS = new MujServer();
             MS.Init(this);
 
-            Korekce = MojeKamera.MojeHodnoty[HodnotyKameryBit.SetOffset];
+            Korekce = MojeKamera.MojeHodnoty[CameraValuesBit.NUCcomputeOffset];
 
             MojeKamera.Connect();
 
