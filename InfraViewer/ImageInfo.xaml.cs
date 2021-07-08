@@ -33,5 +33,11 @@ namespace InfraViewer
             //IH.Average = Math.Round(ih.Sum / ih.Width / ih.Height, 2);
             //IH.Average = ih.Sum / 307200;
         }
+        public void Set(ImageHeader<uint> ih)
+        {
+            IH.Copy(ih);
+            //IH.Average = Math.Round(ih.Sum / ih.Width / ih.Height, 2);
+            //IH.Average = ih.Sum / 307200;
+        }
     }
 }

@@ -12,7 +12,7 @@
     xmlns:local="clr-namespace:InfraViewer"
     x:Class="InfraViewer.MainWindow"
         mc:Ignorable="d"
-        Title="InfraViewer" Height="700" Width="1100">
+        Title="InfraViewer" Height="760" Width="1100">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -30,7 +30,8 @@
             <StackPanel VerticalAlignment="Top" Grid.Column="1">
                 <StackPanel Orientation="Horizontal" Height="37">
                     <Komponenty:IPTextBox x:Name="iptb"/>
-                    <Button Content="Connect" Click="connect"/>
+                    <Infra:PripojitOdpojit x:Name="pripojitOdpojit"/>
+                    <!--<Button Content="Connect" Click="connect"/>-->
                     <Button Content="Search" Click="search"/>
                 </StackPanel>
                 <StackPanel x:Name="sp" >

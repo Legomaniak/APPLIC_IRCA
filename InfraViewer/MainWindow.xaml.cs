@@ -70,8 +70,9 @@ namespace InfraViewer
             cco.TextOn = NastaveniInfraViewer.TextOn;
             cco.TextOff = NastaveniInfraViewer.TextOff;
 
-            var BaseCesta = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "InfraViewer");
-            if (!Directory.Exists(BaseCesta)) Directory.CreateDirectory(BaseCesta);
+            //var BaseCesta = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "InfraViewer");
+            //if (!Directory.Exists(BaseCesta)) Directory.CreateDirectory(BaseCesta);
+            var BaseCesta = "";
             string BolInitCesta = Path.Combine(BaseCesta, NastaveniInfraViewer.BolInit);
             if (!Directory.Exists(BolInitCesta)) Directory.CreateDirectory(BolInitCesta);
 
@@ -93,11 +94,12 @@ namespace InfraViewer
             controlGain.Init(Sensor.HodnotyGMS);
             controlGain.Init(cgms);
 
-            MojeKamera = new Kamera();
+            MojeKamera = new Kamera() { FilterCut = false, };
             MojeKamera.Connected += MojeKamera_Connected;
             MojeKamera.NewObrazekBol += MojeKamera_NewObrazekBol;
             MojeKamera.NewObrazekBolSource += MojeKamera_NewObrazekBolSource;
             MojeKamera.NewObrazekRaw += MojeKamera_NewObrazekRaw;
+            MojeKamera.NewObrazekBolSource4 += MojeKamera_NewObrazekBolSource4;
             controlKamera.Init(MojeKamera);
 
             MojeKamera.Ovladace.Add(bfs);
@@ -105,9 +107,11 @@ namespace InfraViewer
             MojeKamera.Ovladace.Add(corr); 
             MojeKamera.Ovladace.Add(bolometerControl3);
 
+
             MojeKamera.InitOvladace();
 
             cco.Init(MojeKamera);
+            pripojitOdpojit.Init(MojeKamera, iptb);
 
             ov.Init(MojeKamera.Obarvovac);
             NastaveniBolometru nb = new NastaveniBolometru(BolInitCesta);
@@ -125,6 +129,7 @@ namespace InfraViewer
             hcm = new ApplicHyper.Hyper.HyperCubeManager();
             HCQ.Init(hcm);
         }
+
 
         private void Cc_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
@@ -179,6 +184,13 @@ namespace InfraViewer
             hcm?.Show(e);
         }
 
+        private void MojeKamera_NewObrazekBolSource4(object sender, ImageHeader<uint> e)
+        {
+            ii?.Set(e);
+            //Obrazek4 = e;
+            //hcm?.Show(e);
+        }
+
         public void MojeKamera_Connected(object sender, bool e)
         {
             if (!e) return;
@@ -191,7 +203,7 @@ namespace InfraViewer
                     string radek = sr.ReadLine();
                     while (radek != null)
                     {
-                        if (!string.IsNullOrEmpty(radek)) MojeKamera.CC.AddComand(radek, Resp);
+                        if (!string.IsNullOrEmpty(radek) || radek.First() != '#') MojeKamera.CC.AddComand(radek, Resp);
                         radek = sr.ReadLine();
                     }
                     sr.Close();
