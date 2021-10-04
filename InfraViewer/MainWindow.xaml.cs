@@ -51,8 +51,8 @@ namespace InfraViewer
             set
             {
                 NastaveniInfraViewer.NazevObrazku = value;
-                Counter = SaveHelper.GetNumber(Path.Combine(cc.VybranaCesta, NastaveniInfraViewer.NazevObrazku + NastaveniInfraViewer.FileNameSize + NastaveniInfraViewer.Pripona));
-                CounterRaw = SaveHelper.GetNumber(Path.Combine(cc.VybranaCesta, NastaveniInfraViewer.NazevObrazku + NastaveniInfraViewer.FileNameSize + NastaveniInfraViewer.PriponaRAW));
+                //Counter = SaveHelper.GetNumber(Path.Combine(cc.VybranaCesta, NastaveniInfraViewer.NazevObrazku + NastaveniInfraViewer.FileNameSize + NastaveniInfraViewer.Pripona));
+                //CounterRaw = SaveHelper.GetNumber(Path.Combine(cc.VybranaCesta, NastaveniInfraViewer.NazevObrazku + NastaveniInfraViewer.FileNameSize + NastaveniInfraViewer.PriponaRAW));
             }
         }
         public bool SaveRaw = false;
@@ -70,9 +70,9 @@ namespace InfraViewer
             cco.TextOn = NastaveniInfraViewer.TextOn;
             cco.TextOff = NastaveniInfraViewer.TextOff;
 
-            //var BaseCesta = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "InfraViewer");
-            //if (!Directory.Exists(BaseCesta)) Directory.CreateDirectory(BaseCesta);
-            var BaseCesta = "";
+            var BaseCesta = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "InfraViewer");
+            if (!Directory.Exists(BaseCesta)) Directory.CreateDirectory(BaseCesta);
+            //var BaseCesta = "";
             string BolInitCesta = Path.Combine(BaseCesta, NastaveniInfraViewer.BolInit);
             if (!Directory.Exists(BolInitCesta)) Directory.CreateDirectory(BolInitCesta);
 
@@ -84,9 +84,9 @@ namespace InfraViewer
                     NastaveniInfraViewer.CestaSave = Path.Combine(BaseCesta, NastaveniInfraViewer.Saves);
                     Directory.CreateDirectory(NastaveniInfraViewer.CestaSave);
             }
-            cc.VybranaCesta = NastaveniInfraViewer.CestaSave;
-            cc.ButtonText = NastaveniInfraViewer.ButtonText;
-            cc.PropertyChanged += Cc_PropertyChanged;
+            //cc.VybranaCesta = NastaveniInfraViewer.CestaSave;
+            //cc.ButtonText = NastaveniInfraViewer.ButtonText;
+            //cc.PropertyChanged += Cc_PropertyChanged;
             
             Resp = delegate (ClientCommandResponse ccr) { if (ccr.Error) Console.WriteLine("ERR " + ccr.Text); };
 
@@ -126,43 +126,44 @@ namespace InfraViewer
 
             MojeKamera.Connect();
 
-            hcm = new ApplicHyper.Hyper.HyperCubeManager();
-            HCQ.Init(hcm);
+            //hcm = new ApplicHyper.Hyper.HyperCubeManager();
+            //HCQ.Init(hcm);
         }
 
 
-        private void Cc_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "VybranaCesta")
-            {
-                if (Directory.Exists(cc.VybranaCesta))
-                {
-                    NastaveniInfraViewer.CestaSave = cc.VybranaCesta;
-                    Counter = SaveHelper.GetNumber(Path.Combine(cc.VybranaCesta, NastaveniInfraViewer.NazevObrazku + NastaveniInfraViewer.FileNameSize + NastaveniInfraViewer.Pripona));
-                    CounterRaw = SaveHelper.GetNumber(Path.Combine(cc.VybranaCesta, NastaveniInfraViewer.NazevObrazku + NastaveniInfraViewer.FileNameSize + NastaveniInfraViewer.PriponaRAW));
-                }
-            }
-        }
+        //private void Cc_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        //{
+        //    if (e.PropertyName == "VybranaCesta")
+        //    {
+        //        if (Directory.Exists(cc.VybranaCesta))
+        //        {
+        //            NastaveniInfraViewer.CestaSave = cc.VybranaCesta;
+        //            Counter = SaveHelper.GetNumber(Path.Combine(cc.VybranaCesta, NastaveniInfraViewer.NazevObrazku + NastaveniInfraViewer.FileNameSize + NastaveniInfraViewer.Pripona));
+        //            CounterRaw = SaveHelper.GetNumber(Path.Combine(cc.VybranaCesta, NastaveniInfraViewer.NazevObrazku + NastaveniInfraViewer.FileNameSize + NastaveniInfraViewer.PriponaRAW));
+        //        }
+        //    }
+        //}
 
         private void MojeKamera_NewObrazekRaw(object sender, Tuple<byte[], byte[]> e)
         {
-            if (e == null || !SaveRaw) return;
-            if (Directory.Exists(cc.VybranaCesta))
-            {
-                string jmeno = Path.Combine(cc.VybranaCesta, NastaveniInfraViewer.NazevObrazku + CounterRaw.ToString(NastaveniInfraViewer.FileNameSize) + NastaveniInfraViewer.PriponaRAW);
-                using (var fileStream = new FileStream(jmeno, FileMode.Create))
-                {
-                    BinaryWriter wb = new BinaryWriter(fileStream);
-                    int l1 = e.Item1.Length;
-                    int l2 = e.Item2.Length;
-                    wb.Write(l1);
-                    wb.Write(l2);
-                    wb.Write(e.Item1);
-                    wb.Write(e.Item2);
-                    wb.Close();
-                }
-                CounterRaw++;
-            }
+            //cameraQuickSaver.Show(e);
+            //    if (e == null || !SaveRaw) return;
+            //    if (Directory.Exists(cc.VybranaCesta))
+            //    {
+            //        string jmeno = Path.Combine(cc.VybranaCesta, NastaveniInfraViewer.NazevObrazku + CounterRaw.ToString(NastaveniInfraViewer.FileNameSize) + NastaveniInfraViewer.PriponaRAW);
+            //        using (var fileStream = new FileStream(jmeno, FileMode.Create))
+            //        {
+            //            BinaryWriter wb = new BinaryWriter(fileStream);
+            //            int l1 = e.Item1.Length;
+            //            int l2 = e.Item2.Length;
+            //            wb.Write(l1);
+            //            wb.Write(l2);
+            //            wb.Write(e.Item1);
+            //            wb.Write(e.Item2);
+            //            wb.Close();
+            //        }
+            //        CounterRaw++;
+            //    }
         }
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -175,6 +176,7 @@ namespace InfraViewer
         public void MojeKamera_NewObrazekBol(object sender, BitmapSource e)
         {
             ov?.Zobraz(e);
+            cameraQuickSaver.Show(e);
         }
 
         public void MojeKamera_NewObrazekBolSource(object sender, ImageHeader<short> e)
@@ -182,11 +184,13 @@ namespace InfraViewer
             ii?.Set(e);
             Obrazek = e;
             hcm?.Show(e);
+            cameraQuickSaver.Show(e);
         }
 
         private void MojeKamera_NewObrazekBolSource4(object sender, ImageHeader<uint> e)
         {
             ii?.Set(e);
+            cameraQuickSaver.Show(e);
             //Obrazek4 = e;
             //hcm?.Show(e);
         }
@@ -239,9 +243,9 @@ namespace InfraViewer
         public void Save(object sender, RoutedEventArgs e)
         {
             if (Obrazek == null) return;
-            if(Directory.Exists(cc.VybranaCesta))
+            if (Directory.Exists(cameraQuickSaver.Cesta))
             {
-                string jmeno = Path.Combine(cc.VybranaCesta, NastaveniInfraViewer.NazevObrazku + Counter.ToString(NastaveniInfraViewer.FileNameSize) + NastaveniInfraViewer.Pripona);
+                string jmeno = cameraQuickSaver.Cesta + Counter.ToString(NastaveniInfraViewer.FileNameSize) + NastaveniInfraViewer.Pripona;
                 using (var fileStream = new FileStream(jmeno, FileMode.Create))
                 {
                     BinaryWriter wb = new BinaryWriter(fileStream);

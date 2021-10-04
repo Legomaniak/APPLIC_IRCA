@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Komponenty="clr-namespace:AppJCE.Komponenty;assembly=AppJCE"
+    xmlns:KomponentyI="clr-namespace:ApplicInfra.Infra.Komponenty;assembly=ApplicInfra"
     xmlns:Okna="clr-namespace:AppJCE.Okna;assembly=AppJCE"
     xmlns:AppJCE="clr-namespace:AppJCE;assembly=AppJCE"
     xmlns:Controls="clr-namespace:ApplicInfra.Infra.Controls;assembly=ApplicInfra"
@@ -12,7 +13,7 @@
     xmlns:local="clr-namespace:InfraViewer"
     x:Class="InfraViewer.MainWindow"
         mc:Ignorable="d"
-        Title="InfraViewer" Height="760" Width="1100">
+        Title="InfraViewer" Height="877.3" Width="1020.5">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -42,21 +43,22 @@
                 <!--<Button Height="25" Content="Correction" Click="Correction"/>-->
                 <Controls:ControlCorrection x:Name="corr" Content="Plain Correction" Height="25"/>
                 <GroupBox Header="Save image">
-                    <StackPanel>
-                    <AppJCE:ControlCesta x:Name="cc" Height="25"/>
-                    <Button Height="25" Content="Save" Click="Save"/>
-                    </StackPanel>
+                    <KomponentyI:CameraQuickSaver x:Name="cameraQuickSaver"/>
+                    <!--<StackPanel>
+                        <AppJCE:ControlCesta x:Name="cc" Height="25"/>
+                        <Button Height="25" Content="Save" Click="Save"/>
+                    </StackPanel>-->
                 </GroupBox>
-                <GroupBox Header="Save image sequence">
+                <!--<GroupBox Header="Save image sequence">
                     <Hyper:ControlHCubeQuickSaver x:Name="HCQ"/>
-                </GroupBox>
+                </GroupBox>-->
             </StackPanel>
             <local:ImageInfo x:Name="ii" Height="76" VerticalAlignment="Bottom" Grid.Column="1"/>
 
             <Grid Grid.Column="2">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Controls:BolometerFastSetup x:Name="bfs"/>
                 <Infra:KameraControl2 x:Name="kc" Grid.Row="1"/>

@@ -557,8 +557,8 @@ namespace EasyCC
                                     case "clr":
                                         MojeKamera.Colored = ss[2] == "1";
                                         break;
-                                    case "cor"://nic nedela
-                                        MojeKamera.Corr = ss[2] == "1";
+                                    case "fc":
+                                        MojeKamera.FilterCut = ss[2] == "1";
                                         break;
                                     case "color":
                                         if (uint.TryParse(ss[2], out uint barva))
@@ -569,6 +569,12 @@ namespace EasyCC
                                                 //MojeKamera.Obarvovac.SetColoring();//called automaticaly from change of AktivniPolozka
                                             }
                                         }
+                                        break;
+                                    case "cq":
+                                        MojeKamera.ControlQ = ss[2] == "1";
+                                        break;
+                                    case "mux":
+                                        MojeKamera.Mux = int.Parse(ss[2]);
                                         break;
                                     default:
                                         break;

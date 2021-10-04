@@ -116,6 +116,7 @@ namespace InfraViewer
                             MW.Obrazek = null;
                             SpinWait.SpinUntil(() => MW.Obrazek != null, 5000);
                             if(MW.Obrazek==null)return odpovedErr + SW.ElapsedMilliseconds;
+                            //MW.cameraQuickSaver
                             MW.Save(null, null);
                             return odpovedOk + SW.ElapsedMilliseconds;
                         case "IMGR":
@@ -124,25 +125,6 @@ namespace InfraViewer
                             SpinWait.SpinUntil(() => MW.Obrazek != null, 5000);
                             if (MW.Obrazek == null) return odpovedErr + SW.ElapsedMilliseconds;
                             MW.Save(null, null);
-                            return odpovedOk + SW.ElapsedMilliseconds;
-                        case "MIR":
-                            //MW.motor.SetPozice(float.Parse(s[2]));
-                            return odpovedOk + SW.ElapsedMilliseconds;
-                        case "SCAN":
-                            int i = 2;
-                            float p1= float.Parse(s[i++]);
-                            float p2 = float.Parse(s[i++]);
-                            float k = float.Parse(s[i++]);
-                            int t = int.Parse(s[i++]);
-                            int l = (int)((p2 - p1) / k);
-                            for (i = 0; i < l; i++)
-                            {
-                                //MW.motor.SetPozice((p1 + k * j));
-                                MW.Obrazek = null;
-                                SpinWait.SpinUntil(() => false, t);
-                                SpinWait.SpinUntil(() => MW.Obrazek != null, 5000);
-                                MW.Save(null, null);
-                            }
                             return odpovedOk + SW.ElapsedMilliseconds;
                         case "SET":
                             switch (s[1])
@@ -194,15 +176,16 @@ namespace InfraViewer
                                     return odpovedOk + SW.ElapsedMilliseconds;
                                 case "CS":
                                     string cesticka = "";
-                                    i = 2;
+                                    var i = 2;
                                     do
                                     {
                                         cesticka += s[i++];
                                     } while (i < s.Length);
-                                    NastaveniInfraViewer.CestaSave = cesticka;
-                                    MW.cc.VybranaCesta = cesticka;
+                                    MW.cameraQuickSaver.Cesta = cesticka;
                                     return odpovedOk + SW.ElapsedMilliseconds;
                                 case "COR":
+                                    MW.MojeKamera.MojeHodnoty.Get(CameraValuesInt.ImageDestinationAll).Hodnota = 0;
+                                    MW.MojeKamera.MojeHodnoty.Get(CameraValuesInt.ImageDestinationCountAll).Hodnota = -1;
                                     if (bool.Parse(s[2]))
                                     {
                                         MW.MojeKamera.MojeHodnoty.Get(CameraValuesInt3.ImageDestination).Hodnota = new Tuple<long, long, long>((long)EDestination1.SensorCapture, (long)EDestination2.Accelerator, (long)EDestination3.Move);
@@ -257,7 +240,7 @@ namespace InfraViewer
                                 //case "COR":
                                 //    return odpovedOk + (MW.MojeKamera.MojeHodnoty.Get(CameraValuesInt.Destination).Hodnota == 32);
                                 case "CS":
-                                    return odpovedOk + MW.cc.VybranaCesta;
+                                    return odpovedOk + MW.cameraQuickSaver.Cesta;
                                 default:
                                     return odpovedErr + "Neplatny parametr";
                             }
