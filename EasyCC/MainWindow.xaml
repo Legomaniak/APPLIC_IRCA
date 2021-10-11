@@ -4,7 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EasyCC"
-        xmlns:Ini="clr-namespace:AppJCE.Ini;assembly=AppJCE" xmlns:Infra="clr-namespace:ApplicInfra.Infra;assembly=ApplicInfra" x:Class="EasyCC.MainWindow"
+        xmlns:Ini="clr-namespace:AppJCE.Ini;assembly=AppJCE" 
+        xmlns:Infra="clr-namespace:ApplicInfra.Infra;assembly=ApplicInfra" 
+        x:Class="EasyCC.MainWindow"
         mc:Ignorable="d"
         Title="EasyCC" Height="500" Width="900">
     <Grid>
