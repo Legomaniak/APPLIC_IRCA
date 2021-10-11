@@ -10,4 +10,4 @@
 ## InfraEasySetup
  Basic setup and control application for industry purpose
 
-Based on AppInfra, AppJCE v 200713
+Based on AppInfra, AppJCE v 211004
