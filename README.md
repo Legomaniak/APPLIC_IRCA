@@ -2,7 +2,7 @@
  Developers programs for Infra Red Camera APPLIC
 
 ## EasyCC
- Developer camera control with scrypted configuration
+ Developer camera control with scripted configuration
 
 ## InfraViewer
  Easy setup and remote control for laboratory integration
