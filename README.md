@@ -5,7 +5,7 @@
  Developer camera control with scripted configuration
 
 ## InfraSetup
- Easy setup and remote control for laboratory integration
+ Basic setup and remote control for laboratory integration
 
 ## InfraEasySetup
  Basic setup and control application for industry purpose
@@ -13,4 +13,4 @@
 ## InfraViewer
  Tool for visualization measured images from and to different formats
 
-Based on AppInfra, AppJCE v 211004
+Based on dlls AppHyper, AppInfra, AppJCE version 220725
