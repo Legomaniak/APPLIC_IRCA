@@ -7,7 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfraEasySetup", "InfraEasy
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCC", "EasyCC\EasyCC.csproj", "{219A46FE-7297-44BB-BDAE-AC0992DFE41A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfraViewer", "InfraViewer\InfraViewer.csproj", "{2AD43A99-BD81-44EA-88F9-02EDD45276EC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfraSetup", "InfraSetup\InfraSetup.csproj", "{2AD43A99-BD81-44EA-88F9-02EDD45276EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfraViewer", "Viewer\InfraViewer.csproj", "{6ABB5D75-C5C8-4743-90BC-6AC63C920975}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{2AD43A99-BD81-44EA-88F9-02EDD45276EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AD43A99-BD81-44EA-88F9-02EDD45276EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AD43A99-BD81-44EA-88F9-02EDD45276EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6ABB5D75-C5C8-4743-90BC-6AC63C920975}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ABB5D75-C5C8-4743-90BC-6AC63C920975}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ABB5D75-C5C8-4743-90BC-6AC63C920975}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ABB5D75-C5C8-4743-90BC-6AC63C920975}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

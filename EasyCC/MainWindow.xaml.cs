@@ -70,7 +70,8 @@ namespace EasyCC
             Loaded += MainWindow_Loaded;
             //SplashScreen ss = new SplashScreen("obrazek");
             //ss.Show(true, true);
-            WindowState = WindowState.Minimized;
+
+            //WindowState = WindowState.Minimized;
             try
             {
                 this.Top = AppJCE.Properties.MujSettings.Default.Top;

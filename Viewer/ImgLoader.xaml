@@ -1,0 +1,18 @@
+﻿<Window x:Class="InfraViewer.ImgLoader"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:InfraViewer"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="25"/>
+        </Grid.RowDefinitions>
+        <Image x:Name="obrazek"/>
+        <Button Grid.Row="1" Width="70" Content="Load" HorizontalAlignment="Right" Click="Button_Click"/>
+        <ComboBox x:Name="cbColor" Grid.Row="1" Width="150" HorizontalAlignment="Left" FontSize="10" SelectionChanged="ComboColor_SelectionChanged" SelectedIndex="0"/>
+    </Grid>
+</Window>

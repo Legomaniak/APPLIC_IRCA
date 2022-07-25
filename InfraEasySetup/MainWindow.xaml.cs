@@ -37,6 +37,8 @@ namespace InfraEasySetup
         public CameraCommandBit Korekce = null;
         object MonitorLock = new object();
         public ObrazekView Monitor = null;
+        ControlAutoGSKpro AutoCorr = null;
+        NastaveniBolometru nb = null;
 
         //private string cestaIni = "";
         public MainWindow()
@@ -73,7 +75,7 @@ namespace InfraEasySetup
             if (!Directory.Exists(BaseCesta)) Directory.CreateDirectory(BaseCesta);
             string BolInitCesta = Path.Combine(BaseCesta, "BolInit");
             if (!Directory.Exists(BolInitCesta)) Directory.CreateDirectory(BolInitCesta);
-            NastaveniBolometru nb = new NastaveniBolometru(BolInitCesta);
+            nb = new NastaveniBolometru(BolInitCesta);
 
             ControlGMS gms = new ControlGMS();
 
@@ -89,6 +91,8 @@ namespace InfraEasySetup
 
             MojeKamera.InitOvladace();
 
+            AutoCorr = new ControlAutoGSKpro();
+            AutoCorr.Init(MojeKamera);
             cco.Init(MojeKamera);
 
             ov.Init(MojeKamera.Obarvovac, controlROI);
@@ -323,6 +327,125 @@ namespace InfraEasySetup
             {
                 Console.WriteLine(ex);
             }
+        }
+
+        private void SaveCamConf(object sender, RoutedEventArgs e)
+        {
+            var CamInit = MojeKamera.MojeHodnoty.Get(CameraValuesByte.SDcameraInit);
+            var SDwrite = MojeKamera.MojeHodnoty[CameraValuesBit.SDwriteInitSet];
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("SET IMS CNA -1");
+            sb.AppendLine("SET IMS DEA 0");
+            string s = null;
+            var ii = new CameraValuesInt[] { CameraValuesInt.BolometerAcqX, CameraValuesInt.BolometerAcqY, CameraValuesInt.BolometerCKDIV, CameraValuesInt.BolometerFirstX, CameraValuesInt.BolometerFirstY, CameraValuesInt.BolometerLastX, CameraValuesInt.BolometerLastY, CameraValuesInt.BolometerGFID, CameraValuesInt.BolometerGMS, CameraValuesInt.BolometerGSK, CameraValuesInt.BolometerINT, CameraValuesInt.ShutterTimeOff, CameraValuesInt.ShutterTimeOn, CameraValuesInt.BolometerVBUS, CameraValuesInt.BolometerVDET };
+            foreach (var i in ii)
+            {
+                s = MojeKamera.MojeHodnoty.GetInitCommand(i);
+                if (s != null) sb.AppendLine(s);
+            }
+
+            var iii = new CameraValuesBool[] { CameraValuesBool.BolometerEnable, CameraValuesBool.DataComplementEnable, CameraValuesBool.ImageEnableNUC, CameraValuesBool.ShutterPol, CameraValuesBool.ImageOutputPacking, CameraValuesBool.ShutterEnable };
+            foreach (CameraValuesBool i in iii)
+            {
+                s = MojeKamera.MojeHodnoty.GetInitCommand(i);
+                if (s != null) sb.AppendLine(s);
+            }
+            byte[] transfer_data = Encoding.ASCII.GetBytes(sb.ToString());
+            CamInit.Hodnota = transfer_data;
+            SDwrite.Send(1);
+        }
+
+        private void AutoCorrection(object sender, RoutedEventArgs e)
+        {
+
+            var len = MojeKamera.MojeHodnoty[CameraValuesBool.ShutterEnable].HodnotaValid;
+            MojeKamera.MojeHodnoty[CameraValuesBool.ShutterEnable].Hodnota = false;
+            try
+            {
+                AutoCorr.Compute();
+                SpinWait.SpinUntil(() => !AutoCorr.compute, 20000);
+            }
+            catch { }
+            MojeKamera.MojeHodnoty[CameraValuesBool.ShutterEnable].Hodnota = len;
+            bolometerControl.Refresh();
+        }
+
+        private void SaveConf(object sender, RoutedEventArgs e)
+        {
+            var cesta = MojeCesta.VyberCestuFolder();
+            if (string.IsNullOrEmpty(cesta)) return;
+
+            var BaseCesta = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "InfraViewer");
+            DirectoryInfo dir = new DirectoryInfo(BaseCesta);
+            DirectoryInfo[] dirs = dir.GetDirectories();
+
+            if (!Directory.Exists(cesta)) Directory.CreateDirectory(cesta);
+
+            FileInfo[] files = dir.GetFiles();
+            foreach (FileInfo file in files)
+            {
+                string tempPath = Path.Combine(cesta, file.Name);
+                file.CopyTo(tempPath, false);
+            }
+            bool copySubDirs = true;
+            // If copying subdirectories, copy them and their contents to new location.
+            if (copySubDirs)
+            {
+                foreach (DirectoryInfo subdir in dirs)
+                {
+                    string tempPath = Path.Combine(cesta, subdir.Name);
+                    DirectoryCopy(subdir.FullName, tempPath, copySubDirs);
+                }
+            }
+        }
+        public void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
+        {  // Get the subdirectories for the specified directory.
+            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+
+            if (!dir.Exists) { throw new DirectoryNotFoundException("Source directory does not exist or could not be found: " + sourceDirName); }
+
+            DirectoryInfo[] dirs = dir.GetDirectories();
+
+            // If the destination directory doesn't exist, create it.       
+            Directory.CreateDirectory(destDirName);
+
+            // Get the files in the directory and copy them to the new location.
+            FileInfo[] files = dir.GetFiles();
+            foreach (FileInfo file in files)
+            {
+                string tempPath = Path.Combine(destDirName, file.Name);
+                file.CopyTo(tempPath, false);
+            }
+
+            // If copying subdirectories, copy them and their contents to new location.
+            if (copySubDirs)
+            {
+                foreach (DirectoryInfo subdir in dirs)
+                {
+                    string tempPath = Path.Combine(destDirName, subdir.Name);
+                    DirectoryCopy(subdir.FullName, tempPath, copySubDirs);
+                }
+            }
+        }
+
+        private void FactoryConf(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Revert to factory settings?", "", MessageBoxButton.YesNo) != MessageBoxResult.Yes) return;
+            
+            var BaseCesta = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "IRCAapp");
+            if (Directory.Exists(BaseCesta)) Directory.Delete(BaseCesta, true);
+            Directory.CreateDirectory(BaseCesta);
+
+            string BolInitCesta = Path.Combine(BaseCesta, "BolInit");
+            Directory.CreateDirectory(BolInitCesta);
+            
+            nb.SetDefault();
+            nb.Save();
+        }
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

@@ -9,52 +9,79 @@
         xmlns:Infra="clr-namespace:ApplicInfra.Infra;assembly=ApplicInfra"
         xmlns:AppJCE="clr-namespace:AppJCE;assembly=AppJCE"
         xmlns:Komponenty="clr-namespace:AppJCE.Komponenty;assembly=AppJCE"
+        xmlns:komponenty="clr-namespace:ApplicInfra.Infra.Komponenty;assembly=ApplicInfra"
         mc:Ignorable="d"
         Title="InfraEasySetup" Height="600" Width="1000" WindowStyle="SingleBorderWindow">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30*"/>
-            <RowDefinition Height="550*"/>
-            <RowDefinition Height="150"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="300"/>
-        </Grid.ColumnDefinitions>
-        <Okna:HorniLista VerticalAlignment="Top" x:Name="hl" Grid.ColumnSpan="2"/>
-        <Infra:CameraControlOnline x:Name="cco" HorizontalAlignment="Left"/>
+        <TabControl SelectionChanged="TabControl_SelectionChanged">
+            <TabItem Header="Measurement">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30*"/>
+                        <RowDefinition Height="550*"/>
+                        <RowDefinition Height="150"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="300"/>
+                    </Grid.ColumnDefinitions>
+                    <Okna:HorniLista VerticalAlignment="Top" x:Name="hl" Grid.ColumnSpan="2"/>
+                    <Infra:CameraControlOnline x:Name="cco" HorizontalAlignment="Left"/>
 
-        <GroupBox Header="Video stream" Grid.Row="1">
-            <Infra:ObrazekViewFull x:Name="ov"/>
-        </GroupBox>
-        <ScrollViewer Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Margin="0,0,0,35" VerticalScrollBarVisibility="Auto">
-            <StackPanel>
-                <GroupBox Header="Settings">
-                    <StackPanel>
-                        <Controls:BolometerControl3 x:Name="bolometerControl"/>
-                        <Controls:ControlGMSGain x:Name="controlGMSGain" HorizontalAlignment="Left"/>
-                        <Controls:ControlCorrection x:Name="corr" Content="Plain Correction"/>
-                        <Controls:BolometerFastSetup x:Name="bolometerFastSetup" />
+                    <GroupBox Header="Video stream" Grid.Row="1">
+                        <Infra:ObrazekViewFull x:Name="ov"/>
+                    </GroupBox>
+                    <ScrollViewer Grid.Column="1" Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <GroupBox Header="Info">
+                                <StackPanel>
+                                    <Infra:ControlImageHeadeMini x:Name="controlImageHeadeMini"/>
+                                    <Infra:ControlKameraIQ x:Name="controlKameraIQ"/>
+                                </StackPanel>
+                            </GroupBox>
+                            <Button Content="Auto calibration" Click="AutoCorrection"/>
+                            <GroupBox Header="ROI">
+                                <Zobrazeni:ControlROI x:Name="controlROI"/>
+                            </GroupBox>
+                        </StackPanel>
+                    </ScrollViewer>
+                    <GroupBox Header="Graphs" Grid.Row="2">
+                        <Zobrazeni:Show1D x:Name="graph1d"/>
+                    </GroupBox>
+                    <GroupBox Header="Save image" Grid.Column="1" Grid.Row="2">
+                        <komponenty:CameraQuickSaver x:Name="cameraQuickSaver"/>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Settings">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="310"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Top" Grid.Column="0">
+                        <!--<GroupBox Header="Connection">
+                            <StackPanel Orientation="Horizontal" Height="37">
+                                <Komponenty:IPTextBox x:Name="iptb"/>
+                                <Infra:PripojitOdpojit x:Name="pripojitOdpojit"/>
+                                <Button Content="Search" Click="search"/>
+                            </StackPanel>
+                        </GroupBox>-->
+                        <GroupBox Header="Settings">
+                            <StackPanel>
+                                <Controls:BolometerControl3 x:Name="bolometerControl"/>
+                                <Controls:ControlGMSGain x:Name="controlGMSGain" HorizontalAlignment="Left"/>
+                                <Controls:ControlCorrection x:Name="corr" Content="Plain Correction"/>
+                                <Button Content="Save as default" Click="SaveCamConf"/>
+                                <Controls:BolometerFastSetup x:Name="bolometerFastSetup" />
+                                <Button Content="Save ini" Click="SaveConf"/>
+                                <Button Content="Factory settings" Click="FactoryConf"/>
+                                <!--<Controls:ControlKamera x:Name="controlKamera"/>-->
+                            </StackPanel>
+                        </GroupBox>
                     </StackPanel>
-                </GroupBox>
-                <GroupBox Header="Info">
-                    <StackPanel>
-                        <Infra:ControlImageHeadeMini x:Name="controlImageHeadeMini"/>
-                        <Infra:ControlKameraIQ x:Name="controlKameraIQ"/>
-                    </StackPanel>
-                </GroupBox>
-                <GroupBox Header="ROI">
-                    <Zobrazeni:ControlROI x:Name="controlROI"/>
-                </GroupBox>
-            </StackPanel>
-        </ScrollViewer>
-        <GroupBox Header="Graphs" Grid.Row="2">
-            <Zobrazeni:Show1D x:Name="graph1d"/>
-        </GroupBox>
-        <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Bottom" Height="35">
-            <Button Content="Save" Click="ButtonS_Click" Width="50"/>
-            <Separator Visibility="Hidden" Width="10"/>
-            <Button Content="Save Bin" Click="ButtonSB_Click" Width="60"/>
-        </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
