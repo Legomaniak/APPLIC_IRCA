@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCC", "EasyCC\EasyCC.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfraSetup", "InfraSetup\InfraSetup.csproj", "{2AD43A99-BD81-44EA-88F9-02EDD45276EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfraViewer", "Viewer\InfraViewer.csproj", "{6ABB5D75-C5C8-4743-90BC-6AC63C920975}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfraViewer", "InfraViewer\InfraViewer.csproj", "{6ABB5D75-C5C8-4743-90BC-6AC63C920975}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

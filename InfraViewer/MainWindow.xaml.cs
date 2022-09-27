@@ -70,7 +70,7 @@ namespace InfraViewer
             {
                 foreach (var f in Environment.GetCommandLineArgs().Skip(1))
                 {
-                    Load(f);
+                    Load(f, true);
                 }
             }
         }
@@ -79,7 +79,7 @@ namespace InfraViewer
         {
             foreach (var f in (string[])e.Data.GetData(DataFormats.FileDrop))
             {
-                Load(f);
+                Load(f, true);
             }
         }
 
@@ -103,7 +103,7 @@ namespace InfraViewer
             LB.SelectedIndex = Poles.Count()-1;
         }
 
-        private void Load(string cesta)
+        private void Load(string cesta, bool autoDecode=false)
         {
             if (string.IsNullOrEmpty(cesta)) return;
             try
@@ -129,7 +129,7 @@ namespace InfraViewer
                             }
                             Poles.Add(pole);
                         }
-                        catch 
+                        catch
                         {
                             var pole = new MyImage<short>();
                             using (var readBinary = new BinaryReader(new FileStream(cesta, FileMode.Open)))
@@ -165,14 +165,29 @@ namespace InfraViewer
                         }
                         break;
                     default:
-
-                            BitmapSource bs = new BitmapImage(new Uri(cesta));
-                            byte[] b = new byte[bs.PixelWidth * bs.PixelHeight * 4];
-                            bs.CopyPixels(b, bs.PixelWidth * 4, 0);
-                            var w = new ImgLoader();
+                        BitmapSource bs = new BitmapImage(new Uri(cesta));
+                        byte[] b = new byte[bs.PixelWidth * bs.PixelHeight * 4];
+                        bs.CopyPixels(b, bs.PixelWidth * 4, 0);
+                        short[,] ObrazekDecoded = null;
+                        var w = new ImgLoader();
+                        if (autoDecode)
+                        {
+                            foreach (var CP in w.o.ColorPalete.Seznam)
+                            {
+                                var res = CP.getColorI(b, bs.PixelWidth, bs.PixelHeight);
+                                if(res.Item1)
+                                {
+                                    w.ObrazekDecoded = res.Item2;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!autoDecode || ObrazekDecoded == null)
+                        {
                             w.Show(b, bs.PixelWidth, bs.PixelHeight);
                             w.ShowDialog();
-                            Poles.Add(new MyImage<short>() { Name = Path.GetFileNameWithoutExtension(cesta), Data = w.ObrazekDecoded, ResX = w.ObrazekDecoded.GetLength(0), ResY = w.ObrazekDecoded.GetLength(1) });
+                        }
+                        Poles.Add(new MyImage<short>() { Name = Path.GetFileNameWithoutExtension(cesta), Data = w.ObrazekDecoded, ResX = w.ObrazekDecoded.GetLength(0), ResY = w.ObrazekDecoded.GetLength(1) });
                         break;
                 }
             }
@@ -230,33 +245,74 @@ namespace InfraViewer
             int corrX = 648;
             int corrY = 480;
             var corr = new bool[corrX, corrY];
+            int corrType = 0;
 
             foreach (MyImage<short> mi in LB.SelectedItems)
             {
                 if (mi.ResX >= corrX || mi.ResY >= corrY) continue;
-                //predchozi pixel
-                if (corr[0, 0])
+                switch (corrType)
                 {
-                    mi.Data[0, 0] = mi.Data[1, 0];
-                }
-                for (int y = 1; y < corrY; y++)
-                {
-                    if (corr[0, y])
-                    {
-                        mi.Data[0, y] = mi.Data[0, y - 1];
-                    }
-                }
-                for (int x = 1; x < corrX; x++)
-                {
-                    for (int y = 0; y < corrY; y++)
-                    {
-                        if(corr[x,y])
+                    case 1:
+                        //korekce z okoli pixelu
+                        for (int x = 0; x < corrX; x++)
                         {
-                            mi.Data[x, y] = mi.Data[x - 1, y];
+                            for (int y = 0; y < corrY; y++)
+                            {
+                                if (corr[x, y])
+                                {
+                                    int nv = 0;
+                                    int i = 0;
+                                    for (int xx = -1; xx < 1; xx++)
+                                    {
+                                        for (int yy = -1; yy < 1; yy++)
+                                        {
+                                            var nx = x + xx;
+                                            var ny = y + yy;
+                                            if (nx >= 0 && nx < corrX && ny >= 0 && ny < corrY&&nx!=ny)
+                                            {
+                                                if (!corr[nx, ny])
+                                                {
+                                                    i++;
+                                                    nv += mi.Data[nx, ny];
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if(i>0)
+                                    {
+                                        nv /= i;
+                                        mi.Data[x, y] = (short)nv;
+                                    }
+                                }
+                            }
                         }
-                    }
+                        break;
+                    case 0:
+                    default:
+                        //predchozi pixel
+                        if (corr[0, 0])
+                        {
+                            mi.Data[0, 0] = mi.Data[1, 0];
+                        }
+                        for (int y = 1; y < corrY; y++)
+                        {
+                            if (corr[0, y])
+                            {
+                                mi.Data[0, y] = mi.Data[0, y - 1];
+                            }
+                        }
+                        for (int x = 1; x < corrX; x++)
+                        {
+                            for (int y = 0; y < corrY; y++)
+                            {
+                                if (corr[x, y])
+                                {
+                                    mi.Data[x, y] = mi.Data[x - 1, y];
+                                }
+                            }
+                        }
+                        break;
                 }
-                //TODO: korekce z okoli pixelu
             }           
         }
 

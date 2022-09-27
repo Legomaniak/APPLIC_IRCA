@@ -21,7 +21,7 @@ namespace InfraViewer
     /// </summary>
     public partial class ImgLoader : Window
     {
-        Obarvovac o,oGW;
+        public Obarvovac o,oGW;
         byte[] Obrazek = null;
         public short[,] ObrazekDecoded = null;
         int ObrazekX, ObrazekY;
@@ -72,7 +72,7 @@ namespace InfraViewer
             ObrazekX = X;
             ObrazekY = Y;
 
-            ObrazekDecoded = o.ColorPalete._AktivniPolozka.getColorI(obrazek, Y, X);
+            ObrazekDecoded = o.ColorPalete._AktivniPolozka.getColorI(obrazek, Y, X).Item2;
             oGW.PrumerujMinMax(ObrazekDecoded);
             oGW.Obarvy();
             this.obrazek.Source = oGW.GetObraz(ObrazekDecoded);
