@@ -23,7 +23,7 @@ using System.Threading;
 using System.Globalization;
 using AppJCE.Zobrazeni;
 
-namespace InfraEasySetup
+namespace InfraStudio
 {
     /// <summary>
     /// Interakční logika pro MainWindow.xaml

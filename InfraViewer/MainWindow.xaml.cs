@@ -151,14 +151,14 @@ namespace InfraViewer
                         }
                         break;
                     case ".hdr":
-                        HyperCubeManager hcm = new HyperCubeManager();
-                        hcm.Load(cesta);
-                        for (int i = 0; i < hcm.X; i++)
+                        HyperCubeShort HCS = new HyperCubeShort();
+                        HCS.Load(cesta);
+                        for (int i = 0; i < HCS.X; i++)
                         {
                             var p = new MyImage<short>();
-                            p.Name = hcm.Hlavicka.CubeName + i;
+                            p.Name = HCS.Header.CubeName + i;
                             //TODO:spravny rez?
-                            p.Data = hcm.Get(0, i);
+                            p.Data = HCS.Get(ECutDir.CutDirX, i, false);
                             p.ResX = p.Data.GetLength(0);
                             p.ResY = p.Data.GetLength(1);
                             Poles.Add(p);
@@ -320,11 +320,16 @@ namespace InfraViewer
         {
             try
             {
-                HyperCubeManager hcm = new HyperCubeManager();
-                hcm.Cesta = "";
-                foreach (var p in Poles) hcm.pridejSnimek(p.Data);
-                hcm.useCube();
-                hcm.Save();
+                HyperCubeShort HCS = new HyperCubeShort();
+                if (LB.SelectedItems.Count > 1)
+                {
+                    HCS.DataCopy((from p in LB.SelectedItems as IList<MyImage<short>> select p.Data).ToArray());
+                }
+                else
+                {
+                    HCS.DataCopy((from p in Poles select p.Data).ToArray());
+                }
+                HCS.Save();
             }
             catch (Exception ex)
             {
@@ -432,17 +437,15 @@ namespace InfraViewer
 
         private void clear(object sender, RoutedEventArgs e)
         {
-            List<int> p = new List<int>();
-            for (int j = 0; j < LB.Items.Count; j++)
+            if(LB.SelectedItems.Count>0)
             {
-                for (int i = 0; i < LB.SelectedItems.Count; i++)
-                {
-                    if (LB.SelectedItems[i] == LB.Items[j]) p.Add(j);
-                }
+                var p = new List<MyImage<short>>();
+                foreach (MyImage<short> i in LB.SelectedItems) p.Add(i);
+                foreach (var i in p) Poles.Remove(i);
             }
-            for (int i = p.Count - 1; i >= 0; i--)
+            else
             {
-                Poles.RemoveAt(p[i]);
+                Poles.Clear();
             }
         }
 

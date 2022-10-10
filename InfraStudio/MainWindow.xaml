@@ -1,4 +1,4 @@
-﻿<Window xmlns:Zobrazeni="clr-namespace:AppJCE.Zobrazeni;assembly=AppJCE"  x:Class="InfraEasySetup.MainWindow"
+﻿<Window xmlns:Zobrazeni="clr-namespace:AppJCE.Zobrazeni;assembly=AppJCE"  x:Class="InfraStudio.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -11,7 +11,7 @@
         xmlns:Komponenty="clr-namespace:AppJCE.Komponenty;assembly=AppJCE"
         xmlns:komponenty="clr-namespace:ApplicInfra.Infra.Komponenty;assembly=ApplicInfra"
         mc:Ignorable="d"
-        Title="InfraEasySetup" Height="600" Width="1000" WindowStyle="SingleBorderWindow">
+        Title="InfraStudio" Height="600" Width="1000" WindowStyle="SingleBorderWindow">
     <Grid>
         <TabControl SelectionChanged="TabControl_SelectionChanged">
             <TabItem Header="Measurement">

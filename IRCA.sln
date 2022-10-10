@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.1169
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfraEasySetup", "InfraEasySetup\InfraEasySetup.csproj", "{075A58E7-E4C1-4EF5-B03B-650B26F21C82}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfraStudio", "InfraStudio\InfraStudio.csproj", "{075A58E7-E4C1-4EF5-B03B-650B26F21C82}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCC", "EasyCC\EasyCC.csproj", "{219A46FE-7297-44BB-BDAE-AC0992DFE41A}"
 EndProject
