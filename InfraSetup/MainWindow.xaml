@@ -29,19 +29,50 @@
                             <ColumnDefinition Width="200"/>
                         </Grid.ColumnDefinitions>
                         <Infra:ObrazekView x:Name="ov"/>
-                        <StackPanel Grid.Column="1">
-                            <Button Content="Auto calibration" Click="AutoCorrection"/>
-                            <GroupBox Header="Image Info">
-                                <local:ImageInfo x:Name="ii" VerticalAlignment="Bottom"/>
-                            </GroupBox>
-                            <GroupBox Header="Save image">
-                                <KomponentyI:CameraQuickSaver x:Name="cameraQuickSaver"/>
-                            </GroupBox>
-                            <GroupBox Header="Quick settings">
-                                <StackPanel x:Name="spButtons"/>
-                            </GroupBox>
-                        </StackPanel>
+                        <GridSplitter Width="5" Margin="0,0,-2,0" HorizontalAlignment="Right" VerticalAlignment="Stretch" ResizeBehavior="CurrentAndNext" Grid.Row="1" Grid.Column="0"/>
 
+                        <ScrollViewer Grid.Column="1" Margin="2,0,0,0">
+                            <StackPanel>
+                                <Button Content="Auto calibration" Click="AutoCorrection"/>
+                                <GroupBox Header="Image Info">
+                                    <local:ImageInfo x:Name="ii" VerticalAlignment="Bottom"/>
+                                </GroupBox>
+                                <GroupBox Header="Save image">
+                                    <KomponentyI:CameraQuickSaver x:Name="cameraQuickSaver"/>
+                                </GroupBox>
+                                <Expander Header="Quick settings">
+                                    <StackPanel>
+                                        <Infra:KameraControl2 x:Name="kc" Grid.Row="1"/>
+                                        <Button Content="Factory settings" Click="FactoryConf"/>
+                                    </StackPanel>
+                                </Expander>
+                                <Expander Header="Manual settings">
+                                    <StackPanel VerticalAlignment="Top" Grid.Column="0">
+                                        <GroupBox Header="Connection">
+                                            <StackPanel>
+                                                <Komponenty:IPTextBox x:Name="iptb" Height="25" HorizontalAlignment="Center"/>
+                                                <Infra:PripojitOdpojit x:Name="pripojitOdpojit"/>
+                                                <Button Content="Search" Click="search"/>
+                                            </StackPanel>
+                                        </GroupBox>
+                                        <GroupBox Header="Sensor setings">
+                                            <StackPanel>
+                                                <Controls:BolometerControl3 x:Name="bolometerControl3" />
+                                                <Controls:ControlGMSGain x:Name="controlGain" HorizontalAlignment="Left" />
+                                                <Button Content="Save as default" Click="SaveCamConf"/>
+                                            </StackPanel>
+                                        </GroupBox>
+                                        <GroupBox Header="Camera setings">
+                                            <StackPanel>
+                                                <Controls:ControlKamera x:Name="controlKamera"/>
+                                                <Controls:ControlCorrection x:Name="corr" Content="Manual correction" Height="25"/>
+                                            </StackPanel>
+                                        </GroupBox>
+                                        <Button Content="Save ini" Click="SaveConf"/>
+                                    </StackPanel>
+                                </Expander>
+                            </StackPanel>
+                        </ScrollViewer>
                     </Grid>
                     <Okna:HorniLista VerticalAlignment="Top" Grid.ColumnSpan="3" x:Name="hl"/>
                     <Infra:CameraControlOnline x:Name="cco"/>
@@ -55,28 +86,6 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <StackPanel VerticalAlignment="Top" Grid.Column="0">
-                        <GroupBox Header="Connection">
-                            <StackPanel Orientation="Horizontal" Height="37">
-                                <Komponenty:IPTextBox x:Name="iptb"/>
-                                <Infra:PripojitOdpojit x:Name="pripojitOdpojit"/>
-                                <Button Content="Search" Click="search"/>
-                            </StackPanel>
-                        </GroupBox>
-                        <GroupBox Header="Sensor setings">
-                            <StackPanel>
-                                <Controls:BolometerControl3 x:Name="bolometerControl3" />
-                                <Controls:ControlGMSGain x:Name="controlGain" HorizontalAlignment="Left" />
-                                <Button Content="Save as default" Click="SaveCamConf"/>
-                            </StackPanel>
-                        </GroupBox>
-                        <GroupBox Header="Camera setings">
-                            <StackPanel>
-                                <Controls:ControlKamera x:Name="controlKamera"/>
-                                <Controls:ControlCorrection x:Name="corr" Content="Manual correction" Height="25"/>
-                            </StackPanel>
-                        </GroupBox>
-                        <Button Content="Save ini" Click="SaveConf"/>
-                        <Button Content="Factory settings" Click="FactoryConf"/>
                     </StackPanel>
 
                     <Grid Grid.Column="1">
@@ -85,7 +94,6 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <Controls:BolometerFastSetup x:Name="bfs"/>
-                        <Infra:KameraControl2 x:Name="kc" Grid.Row="1"/>
                     </Grid>
                     <GroupBox Header="Sensor setings" Grid.Column="2">
                         <ini:ShowHodnoty x:Name="sh"/>
@@ -93,7 +101,7 @@
                 </Grid>
             </TabItem>
         </TabControl>
-      
+
 
     </Grid>
 </Window>

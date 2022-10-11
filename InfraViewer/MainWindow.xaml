@@ -8,17 +8,13 @@
         mc:Ignorable="d"
         Title="IRCA Viewer" Height="450" Width="800">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100*"/>
-            <ColumnDefinition Width="80"/>
-            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="80" MaxWidth="80"/>
+            <ColumnDefinition Width="80" MaxWidth="80"/>
         </Grid.ColumnDefinitions>
-        <Infra:ObrazekViewColor x:Name="obrazekView" Grid.RowSpan="2"/>
-        <StackPanel Grid.Column="2" Grid.RowSpan="2" Margin="0,0,0,27">
+        <Infra:ObrazekViewColor x:Name="obrazekView" Grid.RowSpan="2" Margin="0,0,2,0"/>
+        <StackPanel Grid.Column="2" Grid.RowSpan="2" Margin="2,0,0,27">
             <GroupBox Header="Import">
                 <StackPanel>
                     <Button Content="LoadIMG" Height="28" Click="loadImg"/>
@@ -49,13 +45,19 @@
                     </Grid>
                     <Button Content="GIF" Height="28" Click="buttonSaveGif"/>
                     <Button Content="Video" Height="28" Click="buttonSaveVideo"/>
-            </StackPanel>
+                </StackPanel>
             </GroupBox>
         </StackPanel>
-        <ListBox x:Name="LB" Grid.Column="1" SelectionChanged="LB_SelectionChanged" Grid.RowSpan="2" ItemsSource="{Binding Poles}" DisplayMemberPath="Name" SelectionMode="Extended" Margin="0,0,0,27"/>
-        <Button Content="Clear" Grid.Column="1" Grid.Row="1" VerticalAlignment="Bottom" Height="28" Click="clear"/>
-        <Viewbox Grid.Column="2" Grid.Row="1" VerticalAlignment="Bottom" Height="28">
+        <GroupBox Header="Images" Grid.Column="1" Grid.RowSpan="2" Margin="2,0,2,0">
+            <Grid>
+                <ListBox x:Name="LB" SelectionChanged="LB_SelectionChanged"  ItemsSource="{Binding Poles}" DisplayMemberPath="Name" SelectionMode="Extended" Margin="0,0,0,28"/>
+                <Button Content="Clear" VerticalAlignment="Bottom" Height="28" Click="clear"/>
+            </Grid>
+        </GroupBox>
+        <Viewbox Grid.Column="2" VerticalAlignment="Bottom" Height="28" Margin="2,0,0,0">
             <Label x:Name="lCoord" Content=""/>
         </Viewbox>
+        <GridSplitter Width="4" Margin="0,0,-2,0" HorizontalAlignment="Right" VerticalAlignment="Stretch" ResizeBehavior="BasedOnAlignment" Grid.Column="0"/>
+        <GridSplitter Width="4" Margin="0,0,-2,0" HorizontalAlignment="Right" VerticalAlignment="Stretch" ResizeBehavior="BasedOnAlignment" Grid.Column="1"/>
     </Grid>
 </Window>

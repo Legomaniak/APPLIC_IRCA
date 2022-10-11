@@ -14,47 +14,66 @@
             <TabItem Header="App">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="75"/>
-                        <ColumnDefinition Width="75"/>
-                        <ColumnDefinition Width="75"/>
-                        <ColumnDefinition Width="200"/>
-                        <ColumnDefinition Width="50"/>
-                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="225" MaxWidth="225"/>
+                        <ColumnDefinition Width="300"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition Height="40"/>
-                        <RowDefinition Height="40"/>
-                    </Grid.RowDefinitions>
                     <!--<Zobrazeni:Show2D x:Name="show2D" Grid.Column="7" Grid.RowSpan="2"/>-->
-                    <Infra:ObrazekView x:Name="show2D" Grid.Column="7" Grid.RowSpan="3" ClipToBounds="True"/>
-                    <GroupBox Header="Vstup" Grid.Column="3" Grid.ColumnSpan="3" Margin="0,0,0,160">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
-                            <TextBox x:Name="textBoxIn" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True"/>
+                    <Infra:ObrazekView x:Name="show2D" Grid.Column="3" ClipToBounds="True"/>
+
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="75"/>
+                            <ColumnDefinition Width="75"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition Height="40"/>
+                        </Grid.RowDefinitions>
+                        <GroupBox Header="Vstup" Grid.ColumnSpan="3">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                <TextBox x:Name="textBoxIn" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True"/>
+                            </ScrollViewer>
+                        </GroupBox>
+                        <GridSplitter Height="4" Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" ResizeBehavior="CurrentAndNext" Grid.ColumnSpan="3"/>
+                        <Button Content="Spust" Grid.Row="2" Grid.Column="1" Click="Start_Click"/>
+                        <Button Content="ON/OFF" Grid.Row="2" Grid.Column="2" Click="Stop_Click" Margin="0,0,2,0"/>
+
+                        <Infra:CameraControlOnline x:Name="cconline" Grid.Column="0" Margin="5,0" Grid.Row="2"/>
+                        <ScrollViewer Grid.Row="1" Grid.ColumnSpan="3" Background="White">
+                            <Infra:ControlImageHeaderRaw x:Name="imageInfo" />
                         </ScrollViewer>
-                    </GroupBox>
-                    <Button Content="Spust" Grid.Row="2" Grid.Column="4" Click="Start_Click"/>
-                    <Button Content="ON/OFF" Grid.Row="2" Grid.Column="5" Click="Stop_Click"/>
+                    </Grid>
 
-                    <GroupBox Header="Kategorie">
-                        <Ini:SlozkaListBox x:Name="slozkaListBox1"/>
-                    </GroupBox>
-                    <GroupBox Header="Skripty" Grid.Column="1" Grid.ColumnSpan="2">
-                        <Ini:SlozkaListBox x:Name="slozkaListBox2"/>
-                    </GroupBox>
-                    <Button Content="File" Grid.Row="1" Grid.Column="0" Click="File_Click"/>
-                    <Button Content="Add" Grid.Row="1" Grid.Column="2" Click="Add_Click"/>
-                    <Button Content="Rem" Grid.Row="1" Grid.Column="1" Click="Rem_Click"/>
-                    <Button Content="Up" Grid.Row="2" Grid.Column="0" Click="Up_Click"/>
-                    <Button Content="Down" Grid.Row="2" Grid.Column="1" Click="Down_Click"/>
-                    <Button Content="Edit" Grid.Row="2" Grid.Column="2" Click="Edit_Click"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="75"/>
+                            <ColumnDefinition Width="75"/>
+                            <ColumnDefinition Width="75"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="40"/>
+                        </Grid.RowDefinitions>
+                        <GroupBox Header="Kategorie">
+                            <Ini:SlozkaListBox x:Name="slozkaListBox1"/>
+                        </GroupBox>
+                        <GroupBox Header="Skripty" Grid.Column="1" Grid.ColumnSpan="2">
+                            <Ini:SlozkaListBox x:Name="slozkaListBox2"/>
+                        </GroupBox>
+                        <Button Content="File" Grid.Row="1" Grid.Column="0" Click="File_Click"/>
+                        <Button Content="Add" Grid.Row="1" Grid.Column="2" Click="Add_Click" Margin="0,0,2,0"/>
+                        <Button Content="Rem" Grid.Row="1" Grid.Column="1" Click="Rem_Click"/>
+                        <Button Content="Up" Grid.Row="2" Grid.Column="0" Click="Up_Click"/>
+                        <Button Content="Down" Grid.Row="2" Grid.Column="1" Click="Down_Click"/>
+                        <Button Content="Edit" Grid.Row="2" Grid.Column="2" Click="Edit_Click" Margin="0,0,2,0"/>
+                    </Grid>
 
-
-                    <Infra:CameraControlOnline x:Name="cconline" Grid.Column="3" Margin="5,0" Grid.Row="2"/>
-                    <ScrollViewer Grid.Column="3" Height="200" Margin="0,0,0,0" Grid.RowSpan="2" VerticalAlignment="Bottom" Grid.ColumnSpan="3" Background="White">
-                        <Infra:ControlImageHeaderRaw x:Name="imageInfo" />
-                    </ScrollViewer>
+                    <GridSplitter Width="4" HorizontalAlignment="Right" VerticalAlignment="Stretch" ResizeBehavior="CurrentAndNext" Grid.Column="0"/>
+                    <GridSplitter Width="4" Margin="0,0,-2,0" HorizontalAlignment="Right" VerticalAlignment="Stretch" ResizeBehavior="CurrentAndNext" Grid.Column="1"/>
 
                 </Grid>
             </TabItem>
