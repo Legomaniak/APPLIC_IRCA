@@ -146,7 +146,7 @@ namespace InfraSetup
                 spButtons.Children.Clear();
                 foreach (var item in nb.Seznam.Skip(4))
                 {
-                    var b = new Button() {Content = item.Jmeno };
+                    var b = new Button() { Content = item.Jmeno };
                     b.Click += delegate (object senderB, RoutedEventArgs eB) { bfs.Set(item); };
                     spButtons.Children.Add(b);
                 }

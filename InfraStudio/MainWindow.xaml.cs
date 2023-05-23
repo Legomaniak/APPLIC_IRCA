@@ -442,10 +442,5 @@ namespace InfraStudio
             nb.SetDefault();
             nb.Save();
         }
-
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
     }
 }
