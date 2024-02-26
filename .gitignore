@@ -264,3 +264,5 @@ __pycache__/
 # Zips
 *.zip
 *.7z
+.ipynb_checkpoints/
+*.egg-info/

@@ -1,0 +1,3 @@
+d:
+cd D:\repos\Pythoviny\APPLIC\PyIRCA
+python setup.py pytest
