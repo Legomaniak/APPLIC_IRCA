@@ -22,6 +22,7 @@ using ApplicInfra.Infra.Controls;
 using System.Threading;
 using System.Globalization;
 using AppJCE.Zobrazeni;
+using AppJCE.Generator;
 
 namespace InfraStudio
 {
@@ -37,10 +38,12 @@ namespace InfraStudio
         public CameraCommandBit Korekce = null;
         object MonitorLock = new object();
         public ObrazekView Monitor = null;
-        ControlAutoGSKpro AutoCorr = null;
-        NastaveniBolometru nb = null;
+        //ControlAutoGSKpro AutoCorr = null;
+        ControlAutoGSKgold AutoCorr = null;
+        //NastaveniBolometru nb = null;
 
         //private string cestaIni = "";
+        private string ConfFile = "Cam.ini";
         public MainWindow()
         {
             InitializeComponent();
@@ -64,34 +67,38 @@ namespace InfraStudio
             cco.TextOff = "Offline:";
 
             Resp = delegate (ClientCommandResponse ccr) { if (ccr.Error) Console.WriteLine("ERR " + ccr.Text); };
-            
+
             MojeKamera = new Kamera();
             MojeKamera.Connected += MojeKamera_Connected;
             MojeKamera.NewObrazekBol += MojeKamera_NewObrazekBol;
             MojeKamera.NewObrazekBolSource += MojeKamera_NewObrazekBolSource;
+            MojeKamera.NewObrazekBolSource4 += MojeKamera_NewObrazekBolSource4;
             MojeKamera.KontrolniFrekvencePripojeni = 20000;
 
             var BaseCesta = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "IRCAapp");
             if (!Directory.Exists(BaseCesta)) Directory.CreateDirectory(BaseCesta);
-            string BolInitCesta = Path.Combine(BaseCesta, "BolInit");
-            if (!Directory.Exists(BolInitCesta)) Directory.CreateDirectory(BolInitCesta);
-            nb = new NastaveniBolometru(BolInitCesta);
+            //string BolInitCesta = Path.Combine(BaseCesta, "BolInit");
+            //if (!Directory.Exists(BolInitCesta)) Directory.CreateDirectory(BolInitCesta);
+            //nb = new NastaveniBolometru(BolInitCesta);
+
+            cameraControl.Init(MojeKamera, BaseCesta);
 
             ControlGMS gms = new ControlGMS();
 
             MojeKamera.Ovladace.Clear();
             MojeKamera.Ovladace.Add(bolometerControl);
-            MojeKamera.Ovladace.Add(bolometerFastSetup);
+            //MojeKamera.Ovladace.Add(bolometerFastSetup);
             MojeKamera.Ovladace.Add(gms);
             MojeKamera.Ovladace.Add(corr);
 
-            bolometerFastSetup.Init(nb);
+            //bolometerFastSetup.Init(nb);
             controlGMSGain.Init(gms);
             controlKameraIQ.Init(MojeKamera);
 
             MojeKamera.InitOvladace();
 
-            AutoCorr = new ControlAutoGSKpro();
+            AutoCorr = new ControlAutoGSKgold() { WithInit = false };
+            //AutoCorr = new ControlAutoGSKpro();
             AutoCorr.Init(MojeKamera);
             cco.Init(MojeKamera);
 
@@ -148,6 +155,7 @@ namespace InfraStudio
                 if (Monitor == null) ov.Zobraz(e);
                 else Monitor.Zobraz(e);
             }
+            cameraQuickSaver.Show(e);
         }
 
         public void MojeKamera_NewObrazekBolSource(object sender, ImageHeader<short> e)
@@ -155,8 +163,13 @@ namespace InfraStudio
             controlImageHeadeMini.Init(e);
             //ii.Set(e);
             Obrazek = e;
-            //ThreadSafer.MakeSTA(controlROI, delegate () { controlROI.Init(e); });
-            controlROI.Init(e);
+            ThreadSafer.MakeSTA(controlROI, delegate () { controlROI.Init(e); });
+            //controlROI.Init(e);
+            cameraQuickSaver.Show(e);
+        }
+        public void MojeKamera_NewObrazekBolSource4(object sender, ImageHeader<uint> e)
+        {
+            cameraQuickSaver.Show(e);
         }
 
         private void KS_VybranaIP(object sender, IPAddress e)
@@ -205,31 +218,73 @@ namespace InfraStudio
             }
             else
             {
-                string file = "Kamera.ini";
-                if (File.Exists(file))
+                Korekce = MojeKamera.MojeHodnoty[CameraValuesBit.NUCcomputeOffset];
+                //Cam Init
+
+                if (File.Exists(ConfFile))
                 {
-                    using (StreamReader sr = new StreamReader(file))
+                    using (StreamReader sr = new StreamReader(ConfFile))
                     {
                         string radek = sr.ReadLine();
                         while (radek != null)
                         {
                             if (!string.IsNullOrEmpty(radek)) MojeKamera.CC.AddComand(radek, Resp);
+                            //Thread.Sleep(100);
                             radek = sr.ReadLine();
                         }
                     }
                 }
-                else Console.WriteLine(file + " not exist");
 
+                MojeKamera.AllData = false;
+                MojeKamera.Average = 0;
+                MojeKamera.Colored = true;
+                MojeKamera.Convert = true;
+                MojeKamera.Dummy = false;
 
-                Korekce = MojeKamera.MojeHodnoty[CameraValuesBit.NUCcomputeOffset];
+                MojeKamera.RefreshOvladace();
 
-                DefaultSettings(null, null);
+                MojeKamera.MojeHodnoty[CameraValuesBool.ShutterEnable].Hodnota = false;
+
+                SpinWait.SpinUntil(() => MojeKamera.CC.Current_command == null, 5000);
+                Thread.Sleep(1000);
+
+                //raw
+                var c = cameraControl.NMI.Seznam.Where(x => x.Jmeno == "Raw_image");
+                if (c.Count() > 0)
+                {
+                    cameraControl.NMI.Set(c.First());
+                    cameraControl.KT?.Decode(cameraControl.NMI.Get()?.Text);
+                }
+
+                SpinWait.SpinUntil(() => MojeKamera.CC.Current_command==null, 5000);
+
+                try
+                {
+                    AutoCorr.Compute(); //auto GSK
+                    SpinWait.SpinUntil(() => !AutoCorr.compute, 20000);
+                }
+                catch { }
 
                 controlROI.MaxX = (int)MojeKamera.MojeHodnoty[CameraValuesInt.ImageWidth].HodnotaValid;
                 controlROI.MaxY = (int)MojeKamera.MojeHodnoty[CameraValuesInt.ImageHeight].HodnotaValid;
                 controlROI.RegenerateMask();
 
-                Korekce.Send(1);
+                SpinWait.SpinUntil(() => MojeKamera.CC.Current_command == null, 5000);
+
+                Korekce.Send(1);//NUC
+
+                Thread.Sleep(3000);
+
+                MojeKamera.MojeHodnoty[CameraValuesBool.ShutterEnable].Hodnota = true;
+
+                c = cameraControl.NMI.Seznam.Where(x => x.Jmeno == "Corr_image");
+                if (c.Count() > 0)
+                {
+                    cameraControl.NMI.Set(c.First());
+                    cameraControl.KT?.Decode(cameraControl.NMI.Get()?.Text);
+                }
+
+                bolometerControl.Refresh();
             }
         }
         
@@ -266,6 +321,7 @@ namespace InfraStudio
                     while (radek != null)
                     {
                         if (!string.IsNullOrEmpty(radek)) MojeKamera.CC.AddComand(radek, Resp);
+                        Thread.Sleep(100);
                         radek = sr.ReadLine();
                     }
                 }
@@ -331,33 +387,26 @@ namespace InfraStudio
 
         private void SaveCamConf(object sender, RoutedEventArgs e)
         {
-            var CamInit = MojeKamera.MojeHodnoty.Get(CameraValuesByte.SDcameraInit);
-            var SDwrite = MojeKamera.MojeHodnoty[CameraValuesBit.SDwriteInitSet];
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("SET IMS CNA -1");
-            sb.AppendLine("SET IMS DEA 0");
             string s = null;
-            var ii = new CameraValuesInt[] { CameraValuesInt.BolometerAcqX, CameraValuesInt.BolometerAcqY, CameraValuesInt.BolometerCKDIV, CameraValuesInt.BolometerFirstX, CameraValuesInt.BolometerFirstY, CameraValuesInt.BolometerLastX, CameraValuesInt.BolometerLastY, CameraValuesInt.BolometerGFID, CameraValuesInt.BolometerGMS, CameraValuesInt.BolometerGSK, CameraValuesInt.BolometerINT, CameraValuesInt.ShutterTimeOff, CameraValuesInt.ShutterTimeOn, CameraValuesInt.BolometerVBUS, CameraValuesInt.BolometerVDET };
+            var ii = new CameraValuesInt[] { CameraValuesInt.BolometerINT, CameraValuesInt.BolometerGSK, CameraValuesInt.BolometerGFID, CameraValuesInt.BolometerVDET, CameraValuesInt.BolometerVBUS, CameraValuesInt.BolometerGMS};
             foreach (var i in ii)
             {
                 s = MojeKamera.MojeHodnoty.GetInitCommand(i);
-                if (s != null) sb.AppendLine(s);
+                if (s != null) sb.Append(s);
             }
 
-            var iii = new CameraValuesBool[] { CameraValuesBool.BolometerEnable, CameraValuesBool.DataComplementEnable, CameraValuesBool.ImageEnableNUC, CameraValuesBool.ShutterPol, CameraValuesBool.ImageOutputPacking, CameraValuesBool.ShutterEnable };
-            foreach (CameraValuesBool i in iii)
+            if (File.Exists("CamDefault.ini"))
             {
-                s = MojeKamera.MojeHodnoty.GetInitCommand(i);
-                if (s != null) sb.AppendLine(s);
+                var txt = File.ReadAllText("CamDefault.ini");
+                if (!string.IsNullOrEmpty(txt)) sb.Append(txt);
             }
-            byte[] transfer_data = Encoding.ASCII.GetBytes(sb.ToString());
-            CamInit.Hodnota = transfer_data;
-            SDwrite.Send(1);
+
+            File.WriteAllText(ConfFile, sb.ToString());
         }
 
         private void AutoCorrection(object sender, RoutedEventArgs e)
         {
-
             var len = MojeKamera.MojeHodnoty[CameraValuesBool.ShutterEnable].HodnotaValid;
             MojeKamera.MojeHodnoty[CameraValuesBool.ShutterEnable].Hodnota = false;
             try
@@ -370,77 +419,75 @@ namespace InfraStudio
             bolometerControl.Refresh();
         }
 
-        private void SaveConf(object sender, RoutedEventArgs e)
-        {
-            var cesta = MojeCesta.VyberCestuFolder();
-            if (string.IsNullOrEmpty(cesta)) return;
+        //private void SaveConf(object sender, RoutedEventArgs e)
+        //{
+        //    var cesta = MojeCesta.VyberCestuFolder();
+        //    if (string.IsNullOrEmpty(cesta)) return;
 
-            var BaseCesta = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "InfraViewer");
-            DirectoryInfo dir = new DirectoryInfo(BaseCesta);
-            DirectoryInfo[] dirs = dir.GetDirectories();
+        //    var BaseCesta = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "InfraViewer");
+        //    DirectoryInfo dir = new DirectoryInfo(BaseCesta);
+        //    DirectoryInfo[] dirs = dir.GetDirectories();
 
-            if (!Directory.Exists(cesta)) Directory.CreateDirectory(cesta);
+        //    if (!Directory.Exists(cesta)) Directory.CreateDirectory(cesta);
 
-            FileInfo[] files = dir.GetFiles();
-            foreach (FileInfo file in files)
-            {
-                string tempPath = Path.Combine(cesta, file.Name);
-                file.CopyTo(tempPath, false);
-            }
-            bool copySubDirs = true;
-            // If copying subdirectories, copy them and their contents to new location.
-            if (copySubDirs)
-            {
-                foreach (DirectoryInfo subdir in dirs)
-                {
-                    string tempPath = Path.Combine(cesta, subdir.Name);
-                    DirectoryCopy(subdir.FullName, tempPath, copySubDirs);
-                }
-            }
-        }
-        public void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
-        {  // Get the subdirectories for the specified directory.
-            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+        //    FileInfo[] files = dir.GetFiles();
+        //    foreach (FileInfo file in files)
+        //    {
+        //        string tempPath = Path.Combine(cesta, file.Name);
+        //        file.CopyTo(tempPath, false);
+        //    }
+        //    bool copySubDirs = true;
+        //    // If copying subdirectories, copy them and their contents to new location.
+        //    if (copySubDirs)
+        //    {
+        //        foreach (DirectoryInfo subdir in dirs)
+        //        {
+        //            string tempPath = Path.Combine(cesta, subdir.Name);
+        //            DirectoryCopy(subdir.FullName, tempPath, copySubDirs);
+        //        }
+        //    }
+        //}
 
-            if (!dir.Exists) { throw new DirectoryNotFoundException("Source directory does not exist or could not be found: " + sourceDirName); }
+        //public void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
+        //{  // Get the subdirectories for the specified directory.
+        //    DirectoryInfo dir = new DirectoryInfo(sourceDirName);
 
-            DirectoryInfo[] dirs = dir.GetDirectories();
+        //    if (!dir.Exists) { throw new DirectoryNotFoundException("Source directory does not exist or could not be found: " + sourceDirName); }
 
-            // If the destination directory doesn't exist, create it.       
-            Directory.CreateDirectory(destDirName);
+        //    DirectoryInfo[] dirs = dir.GetDirectories();
 
-            // Get the files in the directory and copy them to the new location.
-            FileInfo[] files = dir.GetFiles();
-            foreach (FileInfo file in files)
-            {
-                string tempPath = Path.Combine(destDirName, file.Name);
-                file.CopyTo(tempPath, false);
-            }
+        //    // If the destination directory doesn't exist, create it.       
+        //    Directory.CreateDirectory(destDirName);
 
-            // If copying subdirectories, copy them and their contents to new location.
-            if (copySubDirs)
-            {
-                foreach (DirectoryInfo subdir in dirs)
-                {
-                    string tempPath = Path.Combine(destDirName, subdir.Name);
-                    DirectoryCopy(subdir.FullName, tempPath, copySubDirs);
-                }
-            }
-        }
+        //    // Get the files in the directory and copy them to the new location.
+        //    FileInfo[] files = dir.GetFiles();
+        //    foreach (FileInfo file in files)
+        //    {
+        //        string tempPath = Path.Combine(destDirName, file.Name);
+        //        file.CopyTo(tempPath, false);
+        //    }
 
-        private void FactoryConf(object sender, RoutedEventArgs e)
-        {
-            if (MessageBox.Show("Revert to factory settings?", "", MessageBoxButton.YesNo) != MessageBoxResult.Yes) return;
+        //    // If copying subdirectories, copy them and their contents to new location.
+        //    if (copySubDirs)
+        //    {
+        //        foreach (DirectoryInfo subdir in dirs)
+        //        {
+        //            string tempPath = Path.Combine(destDirName, subdir.Name);
+        //            DirectoryCopy(subdir.FullName, tempPath, copySubDirs);
+        //        }
+        //    }
+        //}
+
+        //private void FactoryConf(object sender, RoutedEventArgs e)
+        //{
+        //    if (MessageBox.Show("Revert to factory settings?", "", MessageBoxButton.YesNo) != MessageBoxResult.Yes) return;
             
-            var BaseCesta = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "IRCAapp");
-            if (Directory.Exists(BaseCesta)) Directory.Delete(BaseCesta, true);
-            Directory.CreateDirectory(BaseCesta);
+        //    var BaseCesta = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "IRCAapp");
+        //    if (Directory.Exists(BaseCesta)) Directory.Delete(BaseCesta, true);
+        //    Directory.CreateDirectory(BaseCesta);
 
-            string BolInitCesta = Path.Combine(BaseCesta, "BolInit");
-            Directory.CreateDirectory(BolInitCesta);
-            
-            nb.SetDefault();
-            nb.Save();
-        }
+        //    cameraControl.NMI.SetDefault();
+        //    cameraControl.NMI.Save();
+        //}
     }
 }

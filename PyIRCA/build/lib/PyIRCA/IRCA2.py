@@ -5,6 +5,8 @@ import threading
 import xml.etree.ElementTree as ET
 import asyncio
 import time
+import scipy.optimize as optimize
+import matplotlib.pyplot as plt
 
 Default_IP = "192.168.0.10"
 BUFFER_SIZE = 1024
@@ -63,6 +65,43 @@ class CameraSettings:
     OFF = 4096
     GMS = 3
     
+    def ToString(self):
+        return "GSK = " + str(self.GSK)+"\nGFID = " + str(self.GFID) + "\nINT = " + str(self.INT) + "\nVBUS = " + str(self.VBUS) + "\nVDET = " + str(self.VDET) + "\nAVG = " + str(self.AVG) + "\nOFF = " + str(self.OFF) + "\nGMS = " + str(self.GMS)
+    
+    def DecodeXML(self,root):
+        self.GSK=int(root[0].text)
+        self.GFID=int(root[1].text)
+        self.VDET=int(root[2].text)
+        self.VBUS=int(root[3].text)
+        self.GMS=int(root[4].text)
+        
+    def EncodeXML(self,root):        
+        subel = ET.SubElement(root,"GSK")
+        subel.text = str(self.GSK)
+        subel = ET.SubElement(root,"GFID")
+        subel.text = str(self.GFID)
+        subel = ET.SubElement(root,"VDET")
+        subel.text = str(self.VDET)
+        subel = ET.SubElement(root,"VBUS")
+        subel.text = str(self.VBUS)
+#         subel = ET.SubElement(config,"AVG")
+#         subel.text = str(self.AVG)
+#         subel = ET.SubElement(config,"OFF")
+#         subel.text = str(self.OFF)
+        subel = ET.SubElement(root,"GMS")
+        subel.text = str(self.GMS)
+    
+def MyHist(data):
+    N=16385
+    h=np.zeros(N+1)
+    for x in range(data.shape[0]):
+        for y in range(data.shape[1]):
+            d=data[x,y]
+            if d>N:
+                d=N
+            h[d]=h[d]+1
+    return h
+
 class Camera:
     NewImage = asyncio.Event()
     #def __init__(self):
@@ -72,6 +111,7 @@ class Camera:
         self.SC = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
         self.CC.settimeout(1)
         self.SC.settimeout(1)
+        self.IP = IP
         self.CC.connect((IP, 33000)) 
         self.SC.connect((IP, 34000)) 
         self.Connected = True
@@ -79,22 +119,49 @@ class Camera:
         #self.thread = threading.Thread(target=self.__ImgLoop, args=())
         #self.thread.daemon = True   
     
+    def Reconnect(self):
+        #if self.Connected:
+        self.CC.close()
+        self.SC.close()
+        self.Connected=False
+        try:
+            while self.SC.recv(BUFFER_SIZE): pass
+        except:
+            pass
+        try:
+            while self.CC.recv(BUFFER_SIZE): pass
+        except:
+            pass
+        time.sleep(2)
+        self.Connect(self.IP)
+        
     def Disconnect(self):
         if self.Connected:
             #self.SimpleCommand("SET IMS DES 0 \n")
             #self.SimpleCommand("SET IMS UPD 1 \n")
             #time.sleep(2)
+            self.SimpleCommand("SET LEN ENA 0\n")
             self.CC.close()
             self.SC.close()
             self.Connected=False
         
     def Write(self,command):
+        assert(self.Connected)
         self.CC.send(command.encode())
         
     def Read(self,size=BUFFER_SIZE):
+        assert(self.Connected)
         return self.CC.recv(size)
     
+    def ClearCommand(self):
+        assert(self.Connected)
+        try:
+            while self.CC.recv(BUFFER_SIZE): pass
+        except:
+            pass
+        
     def SimpleCommand(self,command):
+        assert(self.Connected)
         self.Write(command)
         data=self.Read().decode("utf-8") 
         s=data.split(";")
@@ -105,6 +172,7 @@ class Camera:
             print("SimpleCommand",command,data)
         
     def ComplexCommand(self,command):
+        assert(self.Connected)
         self.Write(command)
         data=self.Read().decode("utf-8") 
         s=data.split(";")
@@ -113,35 +181,123 @@ class Camera:
         else:
             print("ComplexCommand",command,data)
     
+    def ComplexCommandDataGet(self,command):
+        assert(self.Connected)        
+        self.Write(command)
+        data=self.Read().decode("utf-8") 
+        # print(data)
+        s=data.split(";")
+        if s[0]=="OK":  
+            n=int(s[1])
+            datarcv = bytearray()
+            while len(datarcv) < n:
+                # print(len(datarcv))
+                packet = self.Read(n - len(datarcv))
+                if not packet:
+                    break
+                datarcv.extend(packet)
+            return datarcv
+        else:
+            print("ComplexCommandDataGet",command,data)
+            
     def Calibration(self):
-        self.SimpleCommand("SET ACC COC 1 \n")
+        assert(self.Connected)
+        self.SimpleCommand("SET BOL COC 1 \n")
         time.sleep(2)
     
+    def minFuncE(self,x):        
+        if not self.Connected:
+            print("Error")
+        self.SimpleCommand("SET BOL GSK " + str(int(x[0])) + "\n")
+        time.sleep(1)
+        i,h = self.GetImgOld(1,True)
+        #hi,b=np.histogram(i[0].flatten(),16385,density=False) 
+        hi=MyHist(i[0]) 
+        d=hi[hi>0].mean()
+        #d=hi[0]+hi[-1]
+        #d=(hi[0]+hi[-1])*16385 + abs(i[0].mean()-8192)
+        #print("minFuncE",int(x[0]),"res",d)
+        return d
+        
+    def SetUpCalibrationTest(self):
+        aGSK=self.Config.GSK
+        h2=round(self.minFuncE([aGSK+5]),1)
+        h3=round(self.minFuncE([aGSK-5]),1)
+        h1=round(self.minFuncE([aGSK]),1)
+        #print(h1,h2,h3)
+        return h1<=h2 and h1<=h3
+    
+    def SetUpCalibration(self,maxiter=5,Bmin=100,Bmax=1000,disp=False):
+        assert(self.Config)
+        #minimalizace GSK podle hist obrazku
+        res = optimize.minimize(self.minFuncE, [int(self.Config.GSK)], method='Powell', bounds=[(Bmin, Bmax)], options={'maxiter': maxiter, 'maxfev': maxiter, 'xtol': 1, 'ftol': 5, 'disp': disp})
+        #res = optimize.minimize(self.minFuncE, [int(self.Config.GSK)], bounds=[(100, 1000)], options={'maxiter': 20, 'disp': True})
+        #print(res)
+        self.Config.GSK = int(res.x[0])
+        self.SetUp(self.Config)
+        i,h = self.GetImgOld(1,True)
+        hi=MyHist(i[0]) 
+        plt.figure()
+        plt.plot(hi)
+        plt.title("GSK " + str(self.Config.GSK))
+        plt.show()
+        
     def SetUp(self,config):
+        self.Config=config
         self.SimpleCommand("SET BOL GSK " + str(config.GSK) + " \n")
         self.SimpleCommand("SET BOL GFD " + str(config.GFID) + " \n")
         self.SimpleCommand("SET BOL INT " + str(config.INT) + " \n")
         self.SimpleCommand("SET BOL VBU " + str(config.VBUS) + " \n")
         self.SimpleCommand("SET BOL VDT " + str(config.VDET) + " \n")
-        self.SimpleCommand("SET ACC COF " + str(config.AVG) + " \n")
-        self.SimpleCommand("SET ACC ZOF " + str(config.OFF) + " \n")
+        self.SimpleCommand("SET BOL CAV " + str(config.AVG) + " \n")
+        self.SimpleCommand("SET BOL ZOF " + str(config.OFF) + " \n")
         self.SimpleCommand("SET BOL GMS " + str(config.GMS) + " \n")
                     
     def StartStream(self,raw=False):
         if raw:
-            self.SimpleCommand("SET IMS DES 16\n")
+            self.SimpleCommand("SET BOL CEN 0\n")
         else:
-            self.SimpleCommand("SET IMS DES 32\n")
-        self.SimpleCommand("SET IMS UPD 1\n")
+            self.SimpleCommand("SET BOL CEN 1\n")
+        self.SimpleCommand("SET BOL STR 1\n")
         
     def StopStream(self):
-        self.SimpleCommand("SET IMS DES 0\n")
-        self.SimpleCommand("SET IMS UPD 1\n")
+        self.SimpleCommand("SET BOL STR 0\n")
         try:
             while self.SC.recv(BUFFER_SIZE): pass
         except:
             pass
         
+    def GetImgOld(self,N,raw=False):
+        assert self.Connected == True
+        self.StartStream(raw)
+        Headers=[]
+        Images=[]
+        timeS=time.time()
+        for i in range(0,N):
+            try:
+                data = self.SC.recv(8).decode("utf-8") 
+#                 print(data)#b'01228801\n'
+                n = int(data)
+                self.SC.send(bytearray([1]))
+                data = bytearray()
+                while len(data) < n:
+                    packet = self.SC.recv(n - len(data))
+                    if not packet:
+                        break
+                    data.extend(packet)
+#                 print(len(data))      
+#                 print(type(data))      
+                #root = ET.fromstring(header)
+#                 IH = Header(header)
+                #IH.DecodeXML(root)  
+#                 Headers.append(IH)
+                Images.append(np.frombuffer(data[:-1],dtype=np.uint32).reshape([640,480]))
+            except:
+                pass
+        print("FPS",N/(time.time()-timeS))
+        self.StopStream()
+        return Images,Headers
+    
     def GetImg(self,N,raw=False):
         assert self.Connected == True
         self.StartStream(raw)
@@ -151,9 +307,9 @@ class Camera:
         for i in range(0,N):
             try:
                 data = str(self.SC.recv(28))
-                #print(data)#b'IRCA3;0000001059;0000614400\n'
+                print(data)#b'IRCA3;0000001059;0000614400\n'
                 sizes = data.split("\\n")[0].split(";")
-                #print(sizes)
+                print(sizes)
                 if sizes[0][2:-1]=="IRCA":
                     header = self.SC.recv(int(sizes[1])).decode("utf-8") 
                     #print(header)
@@ -164,8 +320,8 @@ class Camera:
                         if not packet:
                             break
                         data.extend(packet)
-                    #print(len(data))      
-                    #print(type(data))      
+                    print(len(data))      
+                    print(type(data))      
                     #root = ET.fromstring(header)
                     IH = Header(header)
                     #IH.DecodeXML(root)  
