@@ -114,6 +114,7 @@ def ShowGraphs(data,x,z,label="Measured data",labelX="Snímek",labelY="Hodnota",
     plt.legend(legend)
     plt.show()
     
+
 #vykreslení histogramu (x=ADU, y=četnost)
 def MyHist(data,N=16385):
     h=np.zeros(N+1)
@@ -135,3 +136,127 @@ def recursive_print(element, indent):
     element_children = list(element)
     for child in element_children:
         recursive_print(child, indent + 4)
+        
+# CONV_KERNEL matrix
+def ConvMatrix(typ,flat = False):
+    '''
+    Return ConvMatrix and divisor for given type
+        Parameters:
+            typ (string): Gauss24,Gauss8,Gauss16,Sharpen,Sharpen2,3,4,Robinson,Sobel,Prewitt,Kirsch,Shape,Edge,Nothing
+            flat (boolean): type of return
+        Returns:
+            flat=False (predefined) -> return matrix,divisor
+            flat=True -> return kernFloatArr flatten with divisor
+    '''
+    matrix = np.zeros((5,5),dtype = np.float32)
+    if typ == "Gauss24":
+        matrix = np.array([
+                        [0, 0, 0, 0, 0],
+                        [0, 1, 2, 1, 0],
+                        [0, 2, 4 ,2, 0],
+                        [0, 1, 2, 1, 0],
+                        [0, 0, 0, 0, 0]],dtype=np.float32)
+    if typ == "Gauss8":
+        matrix = np.array([
+                        [0, 0, 0, 0, 0],
+                        [0, 1, 1, 1, 0],
+                        [0, 1, 8, 1, 0],
+                        [0, 1, 1, 1, 0],
+                        [0, 0, 0, 0, 0]],dtype=np.float32)
+    if typ == "Gauss16":
+        matrix = np.array([
+                        [0, 1, 2, 1, 0],
+                        [1, 4, 8, 4, 1],
+                        [2, 8, 16, 8, 2],
+                        [1, 4, 8, 4, 1],
+                        [0, 1, 2, 1, 0]],dtype=np.float32)
+    if typ == "Sharpen":
+        matrix = np.array([
+                        [0, 0, 0, 0, 0],
+                        [0, 0,-1, 0, 0],
+                        [0,-1, 5,-1, 0],
+                        [0, 0,-1, 0, 0],
+                        [0, 0, 0, 0, 0]],dtype=np.float32)
+    if typ == "Sharpen2":
+        matrix = np.array([
+                        [0, 0, 0, 0, 0],
+                        [0,-1,-2,-1, 0],
+                        [0,-2,16,-2, 0],
+                        [0,-1,-2,-1, 0],
+                        [0, 0, 0, 0, 0]],dtype=np.float32)
+    if typ == "Sharpen3":
+        matrix = np.array([
+                        [0, 0, 0, 0, 0],
+                        [0,-1,-1,-1, 0],
+                        [0,-1, 9,-1, 0],
+                        [0,-1,-1,-1, 0],
+                        [0, 0, 0, 0, 0]],dtype=np.float32)
+    if typ == "Sharpen4":
+        matrix = np.array([
+                        [-1,-1,-1,-1,-1],
+                        [-1, 2, 2, 2,-1],
+                        [-1, 2, 8, 2,-1],
+                        [-1, 2, 2, 2,-1],
+                        [-1,-1,-1,-1,-1]],dtype=np.float32)
+    if typ == "Edge":
+        matrix = np.array([
+                        [0, 0, 0, 0, 0],
+                        [0,-1,-1,-1, 0],
+                        [0,-1, 8,-1, 0],
+                        [0,-1,-1,-1, 0],
+                        [0, 0, 0, 0, 0]],dtype=np.float32)
+    if typ == "Shape":
+        matrix = np.array([
+                        [0, 0, 0, 0, 0],
+                        [0, 0, 1, 0, 0],
+                        [0, 1,-4, 1, 0],
+                        [0, 0, 1, 0, 0],
+                        [0, 0, 0, 0, 0]],dtype=np.float32)
+    if typ == "Robinson":
+        matrix = np.array([
+                        [0, 0, 0, 0, 0],
+                        [0,-1,-1,-1, 0],
+                        [0, 1,-2, 1, 0],
+                        [0,-1,-1,-1, 0],
+                        [0, 0, 0, 0, 0]],dtype=np.float32)
+    if typ == "Sobel":
+        matrix = np.array([
+                        [0, 0, 0, 0, 0],
+                        [0,-1,-2,-1, 0],
+                        [0, 0, 0, 0, 0],
+                        [0,-1,-2,-1, 0],
+                        [0, 0, 0, 0, 0]],dtype=np.float32)
+    if typ == "Kirsch":
+        matrix = np.array([
+                        [0, 0, 0, 0, 0],
+                        [0,-5,-5,-5, 0],
+                        [0, 3, 0, 3, 0],
+                        [0, 3, 3, 3, 0],
+                        [0, 0, 0, 0, 0]],dtype=np.float32)
+    if typ == "Prewitt":
+        matrix = np.array([
+                        [-2,-2,-2,-2,-2],
+                        [-1,-1,-1,-1,-1],
+                        [0, 0, 0, 0, 0],
+                        [1, 1, 1, 1, 1],
+                        [2, 2, 2, 2, 2]],dtype=np.float32)
+    if typ == "Nothing":
+        matrix = np.array([
+                        [0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0],
+                        [0, 0, 1, 0, 0],
+                        [0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0]],dtype=np.float32)
+    if np.sum(matrix) != 0:
+        delitel = np.sum(matrix)
+    else:
+        delitel = 1
+    d = np.float32(1/delitel)
+    if flat:
+        kernFloatArr = np.array(matrix.flatten())
+        kernFloatArr = np.append(kernFloatArr,d)
+        return kernFloatArr
+    return matrix,d
+        
+        
+        

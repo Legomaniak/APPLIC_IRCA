@@ -40,14 +40,15 @@
                             <Controls:BolometerControl3 x:Name="bolometerControl"/>
                             <Controls:ControlGMSGain x:Name="controlGMSGain" HorizontalAlignment="Left"/>
                             <Controls:ControlCorrection x:Name="corr" Content="Plain Correction"/>
-                            <Button Content="Save as default" Click="SaveCamConf"/>
-                            <Controls:BolometerFastSetup x:Name="bolometerFastSetup" />
-                            <Button Content="Save ini" Click="SaveConf"/>
-                            <Button Content="Factory settings" Click="FactoryConf"/>
+                            <Button Content="Auto calibration" Click="AutoCorrection"/>
+                            <Button Content="Save setings as default" Click="SaveCamConf"/>
+                            <Infra:KameraControl2 x:Name="cameraControl" />
+                            <!--<Controls:BolometerFastSetup x:Name="bolometerFastSetup" />-->
+                            <!--<Button Content="Save ini" Click="SaveConf"/>-->
+                            <!--<Button Content="Factory settings" Click="FactoryConf"/>-->
                             <!--<Controls:ControlKamera x:Name="controlKamera"/>-->
                         </StackPanel>
                     </Expander>
-                    <Button Content="Auto calibration" Click="AutoCorrection"/>
                     <Expander Header="ROI" IsExpanded="True">
                         <Zobrazeni:ControlROI x:Name="controlROI"/>
                     </Expander>

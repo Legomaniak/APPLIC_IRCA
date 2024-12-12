@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfraSetup", "InfraSetup\In
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfraViewer", "InfraViewer\InfraViewer.csproj", "{6ABB5D75-C5C8-4743-90BC-6AC63C920975}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "PyIRCA", "PyIRCA\PyIRCA.pyproj", "{1B409B2F-807F-4C5C-BA23-BDDED87E3F4F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,8 @@ Global
 		{6ABB5D75-C5C8-4743-90BC-6AC63C920975}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6ABB5D75-C5C8-4743-90BC-6AC63C920975}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6ABB5D75-C5C8-4743-90BC-6AC63C920975}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B409B2F-807F-4C5C-BA23-BDDED87E3F4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B409B2F-807F-4C5C-BA23-BDDED87E3F4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

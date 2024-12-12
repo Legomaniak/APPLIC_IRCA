@@ -468,9 +468,9 @@ namespace InfraViewer
                 {
                     foreach (MyImage<short> o in LB.SelectedItems)
                     {
-                        var img = new MagickImage(O.GetData(o.Data), new MagickReadSettings() { Format = MagickFormat.Bgra, Width = o.ResX, Height = o.ResY });
+                        var img = new MagickImage(O.GetData(o.Data), new MagickReadSettings() { Format = MagickFormat.Bgra, Width = (uint)o.ResX, Height = (uint)o.ResY });
                         collection.Add(img);
-                        collection[collection.Count - 1].AnimationDelay = FPS > 0 ? 1000 / FPS : 1000;
+                        collection[collection.Count - 1].AnimationDelay = (uint)(FPS > 0 ? 1000 / FPS : 1000);
                     }
 
                     // Optionally reduce colors
@@ -500,7 +500,8 @@ namespace InfraViewer
             aviStream.Height = po.ResY;// height;
                                        // class SharpAvi.KnownFourCCs.Codecs contains FOURCCs for several well-known codecs
                                        // Uncompressed is the default value, just set it for clarity
-            aviStream.Codec = KnownFourCCs.Codecs.Uncompressed;
+            //aviStream.Codec = KnownFourCCs.Codecs.Uncompressed;
+            aviStream.Codec = CodecIds.Uncompressed;
             // Uncompressed format requires to also specify bits per pixel
             aviStream.BitsPerPixel = BitsPerPixel.Bpp32;
             var i = 0;

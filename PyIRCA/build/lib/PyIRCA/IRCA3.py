@@ -98,6 +98,7 @@ class CameraSettings:
         subel = ET.SubElement(root,"GMS")
         subel.text = str(self.GMS)
         
+        
 def MyHist(data):
     N=16385
     h=np.zeros(N+1)
@@ -180,7 +181,7 @@ class Camera:
             while self.CC.recv(BUFFER_SIZE): pass
         except:
             pass
-    
+        
     def SimpleCommand(self,command):
         assert(self.Connected)
         self.Write(command)
@@ -194,7 +195,7 @@ class Camera:
             print("SimpleCommand",command,data)
         
     def ComplexCommand(self,command):
-        assert(self.Connected)
+        assert(self.Connected)        
         self.Write(command)
         data=self.Read().decode("utf-8") 
         s=data.split(";")
@@ -306,9 +307,12 @@ class Camera:
             self.SimpleCommand("SET IMS DES 0 3 1\n")
             self.SimpleCommand("SET IMS DES 1 0 1\n")
         elif Mode==4:#Corr Filter
-            self.SimpleCommand("SET IMS DES 0 3 1\n")
-            self.SimpleCommand("SET IMS DES 1 4 1\n")
-            self.SimpleCommand("SET IMS DES 2 0 1\n")
+            # self.SimpleCommand("SET IMS DES 0 3 1\n")
+            # self.SimpleCommand("SET IMS DES 1 4 1\n")
+            # self.SimpleCommand("SET IMS DES 2 0 1\n")
+            self.SimpleCommand("SET IMS DES 0 4 1\n")
+            self.SimpleCommand("SET IMS DES 2 5 1\n")
+            self.SimpleCommand("SET IMS DES 3 0 1\n")
         else:#raw
             self.SimpleCommand("SET IMS DES 0 0 1\n")
 #         time.sleep(2)
@@ -337,7 +341,6 @@ class Camera:
                 self.Reconnect()
             else:
                 assert(self.Connected)
-        
         timeS=time.time()
         print("Start stream ",raw)
         self.StartStream(raw)
@@ -397,7 +400,7 @@ class Camera:
                 #print(data)#b'IRCA3;0000001059;0000614400\n'
                 sizes = data.split("\\n")[0].split(";")
                 #print(sizes)
-                if sizes[0][2:]=="IRCA3":
+                if sizes[0][2:]=="IRCA3":                    
                     n=int(sizes[1])
                     headerb = bytearray()
                     while len(headerb) < n:
