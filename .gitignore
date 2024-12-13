@@ -265,4 +265,7 @@ __pycache__/
 *.zip
 *.7z
 .ipynb_checkpoints/
+*.egg-info/     
+[Bb]uild/      
+[Dd]ist/          
 *.egg-info/
