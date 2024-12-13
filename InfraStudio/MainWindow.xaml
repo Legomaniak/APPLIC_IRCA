@@ -31,7 +31,7 @@
                     <Expander Header="Info" IsExpanded="True">
                         <StackPanel>
                             <Infra:ControlImageHeadeMini x:Name="controlImageHeadeMini"/>
-                            <Infra:ControlKameraIQ x:Name="controlKameraIQ"/>
+                            <Infra:ControlKameraIQ x:Name="controlKameraIQ" Height="25"/>
                         </StackPanel>
                     </Expander>
                     <Separator/>

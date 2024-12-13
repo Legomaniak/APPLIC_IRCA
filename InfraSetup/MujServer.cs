@@ -201,6 +201,9 @@ namespace InfraSetup
                                 case "IA":
                                     MW.MojeKamera.Average = int.Parse(s[2]);
                                     return odpovedOk + SW.ElapsedMilliseconds;
+                                case "AC":
+                                    MW.AutoCorrection(null, null);
+                                    return odpovedOk + SW.ElapsedMilliseconds;
                                 default:
                                     return odpovedErr + "Neplatny parametr";
                             }

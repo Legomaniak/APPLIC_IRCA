@@ -97,12 +97,20 @@ namespace InfraStudio
 
             MojeKamera.InitOvladace();
 
+            MojeKamera.AllData = false;
+            MojeKamera.Average = 0;
+            MojeKamera.Colored = true;
+            MojeKamera.Convert = true;
+            MojeKamera.Dummy = false;
+            MojeKamera.ControlQ = true;
+
             AutoCorr = new ControlAutoGSKgold() { WithInit = false };
             //AutoCorr = new ControlAutoGSKpro();
             AutoCorr.Init(MojeKamera);
             cco.Init(MojeKamera);
 
             ov.Init(MojeKamera.Obarvovac, controlROI);
+            MojeKamera.Obarvovac.AutoColor = true;
 
             controlROI.NewLines += ControlROI_NewLines;
             graph1d.showName = false;
@@ -121,7 +129,12 @@ namespace InfraStudio
         private void ControlROI_NewLines(object sender, List<double[]> e)
         {
             if (e == null) ThreadSafer.MakeSTA(graph1d, delegate () { graph1d.Clear(); });
-            else ThreadSafer.MakeSTA(graph1d, delegate () { graph1d.addData(e.ToArray()); });
+            //else ThreadSafer.MakeSTA(graph1d, delegate () { graph1d.Clear(); graph1d.addData(e.ToArray()); });
+            else ThreadSafer.MakeSTA(graph1d, delegate ()
+            {
+                graph1d.Clear();
+                graph1d.addData(e[0], false);
+            });
         }
 
         private void BFull_Click(object sender, RoutedEventArgs e)
@@ -196,7 +209,7 @@ namespace InfraStudio
         }
         public void MojeKamera_Connected(object sender, bool e)
         {
-            if (!e)
+            if (!e) 
             {
                 MessageBox.Show("Nedostupná kamera!");
                 ThreadSafer.MakeMain(() =>
@@ -228,18 +241,12 @@ namespace InfraStudio
                         string radek = sr.ReadLine();
                         while (radek != null)
                         {
-                            if (!string.IsNullOrEmpty(radek)) MojeKamera.CC.AddComand(radek, Resp);
+                            if (!string.IsNullOrEmpty(radek) && radek.First() != '#') MojeKamera.CC.AddComand(radek, Resp);
                             //Thread.Sleep(100);
                             radek = sr.ReadLine();
                         }
                     }
                 }
-
-                MojeKamera.AllData = false;
-                MojeKamera.Average = 0;
-                MojeKamera.Colored = true;
-                MojeKamera.Convert = true;
-                MojeKamera.Dummy = false;
 
                 MojeKamera.RefreshOvladace();
 

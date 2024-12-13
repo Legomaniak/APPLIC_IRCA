@@ -60,7 +60,8 @@ namespace InfraSetup
         private string cestaIni = "";
         ApplicHyper.Hyper.HyperCubeManager hcm = null;
         public NastaveniBolometru nb = null;
-        ControlAutoGSKpro AutoCorr = null;
+        //ControlAutoGSKpro AutoCorr = null;
+        public ControlAutoGSKgold AutoCorr = null;
         public MainWindow()
         {
             InitializeComponent();
@@ -112,16 +113,22 @@ namespace InfraSetup
             MojeKamera.Ovladace.Add(corr); 
             MojeKamera.Ovladace.Add(bolometerControl3);
 
-
             MojeKamera.InitOvladace();
 
+            MojeKamera.AllData = false;
+            MojeKamera.Average = 0;
+            MojeKamera.Colored = true;
+            MojeKamera.Convert = true;
+            MojeKamera.Dummy = false;
 
-            AutoCorr = new ControlAutoGSKpro();
+            //AutoCorr = new ControlAutoGSKpro();
+            AutoCorr = new ControlAutoGSKgold() { WithInit = false };
             AutoCorr.Init(MojeKamera);
             cco.Init(MojeKamera);
             pripojitOdpojit.Init(MojeKamera, iptb);
 
             ov.Init(MojeKamera.Obarvovac);
+            MojeKamera.Obarvovac.AutoColor = true;
             nb = new NastaveniBolometru(BolInitCesta);
             bfs.Init(nb);
 
@@ -226,26 +233,107 @@ namespace InfraSetup
 
         public void MojeKamera_Connected(object sender, bool e)
         {
-            if (!e) return;
-            if (!MojeKamera.Pripojeno) MessageBox.Show(NastaveniInfraSetup.KameraNepripojena);
+            if (!e)
+            {
+                MessageBox.Show("Nedostupná kamera!");
+                ThreadSafer.MakeMain(() =>
+                {
+                    kcw = new KameraConnectWindow();
+                    kcw.KS.VybranaIP += KS_VybranaIP;
+                    kcw.ShowDialog();
+                    //if (!kcw.ShowDialog().Value)
+                    //{
+                    //    Close();
+                    //}
+                });
+                return;
+            }
+            if (!MojeKamera.Pripojeno)
+            {
+                MessageBox.Show("Kamera neni připojena");
+                Close();
+            }
             else
             {
+                Korekce = MojeKamera.MojeHodnoty[CameraValuesBit.NUCcomputeOffset];
+                //Cam Init
+
+                if (File.Exists(cestaIni))
+                {
+                    using (StreamReader sr = new StreamReader(cestaIni))
+                    {
+                        string radek = sr.ReadLine();
+                        while (radek != null)
+                        {
+                            if (!string.IsNullOrEmpty(radek) && radek.First() != '#') MojeKamera.CC.AddComand(radek, Resp);
+                            //Thread.Sleep(100);
+                            radek = sr.ReadLine();
+                        }
+                    }
+                }
+
+                MojeKamera.RefreshOvladace();
+
+                MojeKamera.MojeHodnoty[CameraValuesBool.ShutterEnable].Hodnota = false;
+
+                SpinWait.SpinUntil(() => MojeKamera.CC.Current_command == null, 5000);
+                Thread.Sleep(1000);
+
+                //raw
+                var c = kc.NMI.Seznam.Where(x => x.Jmeno == "Raw_image");
+                if (c.Count() > 0)
+                {
+                    kc.NMI.Set(c.First());
+                    kc.KT?.Decode(kc.NMI.Get()?.Text);
+                }
+
+                SpinWait.SpinUntil(() => MojeKamera.CC.Current_command == null, 5000);
+
                 try
                 {
-                    StreamReader sr = new StreamReader(cestaIni);
-                    string radek = sr.ReadLine();
-                    while (radek != null)
-                    {
-                        if (!string.IsNullOrEmpty(radek) || radek.First() != '#') MojeKamera.CC.AddComand(radek, Resp);
-                        radek = sr.ReadLine();
-                    }
-                    sr.Close();
+                    AutoCorr.Compute(); //auto GSK
+                    SpinWait.SpinUntil(() => !AutoCorr.compute, 20000);
                 }
-                catch
+                catch { }
+
+                SpinWait.SpinUntil(() => MojeKamera.CC.Current_command == null, 5000);
+
+                Korekce.Send(1);//NUC
+
+                Thread.Sleep(3000);
+
+                MojeKamera.MojeHodnoty[CameraValuesBool.ShutterEnable].Hodnota = true;
+
+                c = kc.NMI.Seznam.Where(x => x.Jmeno == "Corr_image");
+                if (c.Count() > 0)
                 {
-                    Console.WriteLine("init file error");
+                    kc.NMI.Set(c.First());
+                    kc.KT?.Decode(kc.NMI.Get()?.Text);
                 }
+
+                bolometerControl3.Refresh();
             }
+
+            //if (!e) return;
+            //if (!MojeKamera.Pripojeno) MessageBox.Show(NastaveniInfraSetup.KameraNepripojena);
+            //else
+            //{
+            //    try
+            //    {
+            //        StreamReader sr = new StreamReader(cestaIni);
+            //        string radek = sr.ReadLine();
+            //        while (radek != null)
+            //        {
+            //            if (!string.IsNullOrEmpty(radek) && radek.First() != '#') MojeKamera.CC.AddComand(radek, Resp);
+            //            radek = sr.ReadLine();
+            //        }
+            //        sr.Close();
+            //    }
+            //    catch
+            //    {
+            //        Console.WriteLine("init file error");
+            //    }
+            //}
 
             //Korekce = MojeKamera.MojeHodnoty[HodnotyKameryBit.SetOffset];
             //controlGain.Init(Sensor.HodnotyGMS);
@@ -426,10 +514,11 @@ namespace InfraSetup
             kc.NMI.Save();
         }
 
-        private void AutoCorrection(object sender, RoutedEventArgs e)
+        public void AutoCorrection(object sender, RoutedEventArgs e)
         {
             var len = MojeKamera.MojeHodnoty[CameraValuesBool.ShutterEnable].HodnotaValid;
             MojeKamera.MojeHodnoty[CameraValuesBool.ShutterEnable].Hodnota = false;
+            SpinWait.SpinUntil(() => MojeKamera.CC.Current_command == null, 5000);
             try
             {
                 AutoCorr.Compute();

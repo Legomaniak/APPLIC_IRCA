@@ -2,6 +2,7 @@ using AppJCE;
 using AppJCE.Komunikace;
 using AppJCE.SplashScreen;
 using ApplicInfra.Infra;
+using ApplicInfra.Infra.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -43,6 +44,9 @@ namespace EasyCC
         public Queue<Tuple<byte[], byte[]>> StoreFIFO;
         public int SaveNum { get; set; } = 0;
         public int SaveNumMax { get; set; } = 1000;
+
+        //ControlAutoGSKpro AutoCorr = null;
+        public ControlAutoGSKgold AutoCorr = null;
 
         public MainWindow()
         {
@@ -124,6 +128,9 @@ namespace EasyCC
 
             cconline.Init(MojeKamera);
             n.Init(MojeKamera);
+
+            AutoCorr = new ControlAutoGSKgold() { WithInit = false };
+            AutoCorr.Init(MojeKamera);
         }
 
 
@@ -576,6 +583,11 @@ namespace EasyCC
                                         break;
                                     case "mux":
                                         MojeKamera.Mux = int.Parse(ss[2]);
+                                        break;
+                                    case "acg":
+                                        SpinWait.SpinUntil(() => MojeKamera.CC.Current_command == null, 5000);
+                                        AutoCorr.Compute(); //auto GSK
+                                        SpinWait.SpinUntil(() => !AutoCorr.compute, 20000);
                                         break;
                                     default:
                                         break;

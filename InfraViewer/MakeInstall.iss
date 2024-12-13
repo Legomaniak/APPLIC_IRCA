@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "InfraViewer"
-#define MyAppVersion "230523"
+#define MyAppVersion "241213"
 #define MyAppPublisher "APPLIC"
 #define MyAppURL "https://www.applic.cz/"
 #define MyAppExeName "Viewer.exe"
