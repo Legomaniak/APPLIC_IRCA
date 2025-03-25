@@ -9,7 +9,7 @@
         xmlns:Infra="clr-namespace:ApplicInfra.Infra;assembly=ApplicInfra"
         xmlns:AppJCE="clr-namespace:AppJCE;assembly=AppJCE"
         xmlns:Komponenty="clr-namespace:AppJCE.Komponenty;assembly=AppJCE"
-        xmlns:komponenty="clr-namespace:ApplicInfra.Infra.Komponenty;assembly=ApplicInfra"
+        xmlns:komponenty="clr-namespace:ApplicInfra.Infra.Komponenty;assembly=ApplicInfra" xmlns:barvy="clr-namespace:AppJCE.Barvy;assembly=AppJCE" xmlns:ini="clr-namespace:AppJCE.Ini;assembly=AppJCE"
         mc:Ignorable="d"
         Title="InfraStudio" Height="600" Width="1000" WindowStyle="SingleBorderWindow">
     <Grid>
@@ -43,6 +43,12 @@
                             <Button Content="Auto calibration" Click="AutoCorrection"/>
                             <Button Content="Save setings as default" Click="SaveCamConf"/>
                             <Infra:KameraControl2 x:Name="cameraControl" />
+                            <GroupBox Header="Coloring">
+                                <StackPanel>
+                                    <ini:SlozkaComboBox x:Name="colorControl"/>
+                                    <barvy:ColorDistortionControl x:Name="colorDistControl"/>
+                                </StackPanel>
+                            </GroupBox>
                             <!--<Controls:BolometerFastSetup x:Name="bolometerFastSetup" />-->
                             <!--<Button Content="Save ini" Click="SaveConf"/>-->
                             <!--<Button Content="Factory settings" Click="FactoryConf"/>-->

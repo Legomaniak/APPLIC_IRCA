@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "EasyCC"
-#define MyAppVersion "241213"
+#define MyAppVersion "250325"
 #define MyAppPublisher "APPLIC"
 #define MyAppURL "https://www.applic.cz/"
 #define MyAppExeName "EasyCC.exe"

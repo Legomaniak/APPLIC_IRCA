@@ -23,6 +23,7 @@ using System.Threading;
 using System.Globalization;
 using AppJCE.Zobrazeni;
 using AppJCE.Generator;
+using AppJCE.Barvy;
 
 namespace InfraStudio
 {
@@ -111,6 +112,8 @@ namespace InfraStudio
 
             ov.Init(MojeKamera.Obarvovac, controlROI);
             MojeKamera.Obarvovac.AutoColor = true;
+            colorControl.Init(MojeKamera.Obarvovac.ColorPalete);
+            colorDistControl.Init(MojeKamera.Obarvovac);
 
             controlROI.NewLines += ControlROI_NewLines;
             graph1d.showName = false;
@@ -133,7 +136,8 @@ namespace InfraStudio
             else ThreadSafer.MakeSTA(graph1d, delegate ()
             {
                 graph1d.Clear();
-                graph1d.addData(e[0], false);
+                if (e != null && e.Count > 0)
+                    graph1d.addData(e[0], false);
             });
         }
 
@@ -488,7 +492,7 @@ namespace InfraStudio
         //private void FactoryConf(object sender, RoutedEventArgs e)
         //{
         //    if (MessageBox.Show("Revert to factory settings?", "", MessageBoxButton.YesNo) != MessageBoxResult.Yes) return;
-            
+
         //    var BaseCesta = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "IRCAapp");
         //    if (Directory.Exists(BaseCesta)) Directory.Delete(BaseCesta, true);
         //    Directory.CreateDirectory(BaseCesta);

@@ -43,10 +43,12 @@ namespace EasyCC
         public string CestaSave { get; set; }
         public Queue<Tuple<byte[], byte[]>> StoreFIFO;
         public int SaveNum { get; set; } = 0;
-        public int SaveNumMax { get; set; } = 1000;
+        public int SaveNumMax { get; set; } = 0;
 
         //ControlAutoGSKpro AutoCorr = null;
         public ControlAutoGSKgold AutoCorr = null;
+
+        public static string FileNameSize = "000";
 
         public MainWindow()
         {
@@ -300,7 +302,15 @@ namespace EasyCC
             {
                 //uloz obrazek
 
-                var cesta = Path.Combine(CestaSave, SaveNum + ".bmp");
+                var cesta = Path.Combine(CestaSave, SaveNum.ToString(FileNameSize) + ".bmp");
+
+                while (File.Exists(cesta))//uniqMaker
+                {
+                    SaveNum++;
+                    string fn = SaveNum.ToString(FileNameSize) + ".bmp";
+                    cesta = Path.Combine(CestaSave, fn);
+                }
+
                 BitmapFrame bf = null;
                 if (e != null)
                 {
@@ -542,6 +552,18 @@ namespace EasyCC
                                 SaveAllB = true;
                                 SaveTimeout = int.Parse(ss[3]);
                                 StoreFIFO = new Queue<Tuple<byte[], byte[]>>(SaveNumMax);
+                            }
+                            catch (Exception ex) { Console.WriteLine(ex.Message); }
+                            break;
+                        case "saveu":
+                            try
+                            {
+                                CestaSave = ss[1];
+                                if (!Directory.Exists(CestaSave)) Directory.CreateDirectory(CestaSave);
+                                SaveNumMax += int.Parse(ss[2]);
+                                SaveAll = true;
+                                SaveAllB = false;
+                                SaveTimeout = int.Parse(ss[3]);
                             }
                             catch (Exception ex) { Console.WriteLine(ex.Message); }
                             break;

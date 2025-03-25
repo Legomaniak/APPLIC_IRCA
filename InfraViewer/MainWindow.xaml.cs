@@ -441,11 +441,13 @@ namespace InfraViewer
             {
                 var p = new List<MyImage<short>>();
                 foreach (MyImage<short> i in LB.SelectedItems) p.Add(i);
+                LB.SelectedIndex = -1;
                 foreach (var i in p) Poles.Remove(i);
             }
             else
             {
                 Poles.Clear();
+                LB.SelectedIndex = -1;
             }
         }
 
